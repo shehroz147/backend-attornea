@@ -5,7 +5,7 @@ module.exports = async function connection() {
         const connectionParams = {
             useNewUrlParser: true,
         };
-        await mongoose.connect("mongodb://localhost:27017/Clirim", connectionParams);
+        await mongoose.connect("mongodb://localhost:27017/attor", connectionParams);
         console.log("connected to database.");
     } catch (error) {
         console.log(error, "could not connect to database.");

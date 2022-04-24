@@ -9,9 +9,15 @@ const LawyerHelper = require('../helpers/lawyerHelper')
 
 const jwt = require("jsonwebtoken");
 const req = require("express/lib/request");
+const res = require('express/lib/response');
 
 
+exports.addCase = async () => {
+    let request = req.body;
+    const addingCase = await LawyerHelper.addCase(request);
+    return res.status(200).json("Successfully added case");
 
+}
 // exports.registerUser = async (req, res) => {
 //     let request = req.body;
 //     console.log(request);
@@ -78,7 +84,7 @@ const req = require("express/lib/request");
 // }
 
 
-// exports.verifyEmail = async (req, res) => { 
+// exports.verifyEmail = async (req, res) => {
 
 //     const user = await User.findOne({ _id: req.params.id });
 //     if (!user) return res.status(400).send("Invalid link");

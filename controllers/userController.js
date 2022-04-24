@@ -42,7 +42,7 @@ exports.registerUser = async (req, res) => {
         token: data,
     }).save();
 
-    const message = `https://law-back.herokuapp.com/user/verify/${user._id}/${token.token}`;
+    const message = `http://localhost:4000/user/verify/${user._id}/${token.token}`;
     await EmailHelper.sendEmail(user.email, message);
     return res.status(200).json("Successful");
 };
@@ -109,7 +109,7 @@ exports.login = async (req, res) => {
     }
 
     let checkEmail = await UserHelper.findUser(email);
-    console.log(checkEmail);
+    // console.log(checkEmail);
     if (checkEmail === null) {
         return res.status(400).json("Email doesnot exists");
     }

@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 
 //Required Routes
 const userRoutes = require("./routes/userRoutes");
+const res = require("express/lib/response");
 
 
 const options = {
@@ -20,8 +21,10 @@ app.use(express.json());
 const server = process.env.MODE == "DEV" ? http.createServer(app) : http.createServer(options, app);
 
 // const url = 'mongodb+srv://nikita:Restart987@test.yxvwr.mongodb.net/test';
-const url = 'mongodb+srv://zeeshan:Attornea@attornea.1s7ub.mongodb.net/test';
+// const url = 'mongodb+srv://zeeshan:Attornea@attornea.1s7ub.mongodb.net/test';
 
+
+const url = "mongodb://localhost:27017/attor";
 mongoose.connect(url, { useNewUrlParser: true }, (err) => {
     if (!err) {
         console.log('Connection Successful');
@@ -70,6 +73,7 @@ app.use((error, req, res, next) => {
         }
     });
 });
+
 
 server.listen(4000, () => console.log("Server is up on port " + `4000`));
 module.exports = app;
