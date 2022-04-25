@@ -14,7 +14,7 @@ router.post("/login", UserController.login);
 router.post("/postQuestion", UserController.askQuestion)
 router.post("/hire", UserController.hire)
 router.post('/talk', UserController.talk)
-
+router.post('/viewLawyers', UserController.viewLawyers);
 
 
 module.exports = router;

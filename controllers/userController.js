@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const UserHelper = require('../helpers/userHelper');
 const Token = require('../models/tokenModel');
 const EmailHelper = require('../utils/emailHelper');
-const Question = require('../models/question');
+const Question = require('../models/questionModel');
 const jwt = require("jsonwebtoken");
 const Talk = require('../models/talk')
 const hireLawyer = require("../models/hireLawyer");
-
+const Lawyer = require('../models/lawyerModel');
 
 
 exports.registerUser = async (req, res) => {
@@ -134,13 +134,10 @@ exports.askQuestion = async (req, res) => {
     let title = req.body.title
     let areaOfLaw = req.body.areaOfLaw
     let description = req.body.description
-    if (!(province && description)) {
-        return res.status(400).json("Something Missing")
-    }
+
     const ques = new Question({
         _id: new mongoose.Types.ObjectId(),
         city: city,
-        title: title,
         title: title,
         areaOfLaw: areaOfLaw,
         description: description,
@@ -206,4 +203,19 @@ exports.talk = async (req, res) => {
     })
     await talkk.save();
     return res.status(200).json("done--")
+}
+
+
+exports.viewRecentQuestions = async (req, res) => {
+    let request = req.body;
+    let queries = [];
+    queries = await Question.find();
+    return res.status(200).json(queries);
+}
+
+exports.viewLawyers = async (req, res) => {
+    let request = req.body;
+    let lawyerList = [];
+    lawyerList = await Lawyer.find();
+    return res.status(200).json(lawyerList);
 }

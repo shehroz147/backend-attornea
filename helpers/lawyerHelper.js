@@ -16,6 +16,7 @@ exports.findLawyerPass = async (email, pass) => {
 
 exports.addCase = async (request) => {
     const myCase = new Case({
+        _id: new mongoose.Types.ObjectId(),
         caseStatus: request.caseStatus,
         caseClient: request.caseClient,
         caseName: request.caseClient,
