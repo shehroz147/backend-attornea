@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 //Required Routes
 const userRoutes = require("./routes/userRoutes");
 const res = require("express/lib/response");
+const lawyerRoutes = require('./routes/lawyerRoutes')
 
 
 const options = {
@@ -56,7 +57,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", userRoutes);
-
+app.use('/lawyer',lawyerRoutes)
 
 
 app.use((req, res, next) => {

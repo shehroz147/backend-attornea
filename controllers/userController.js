@@ -209,7 +209,7 @@ exports.talk = async (req, res) => {
 exports.viewRecentQuestions = async (req, res) => {
     let request = req.body;
     let queries = [];
-    queries = await Question.find();
+    queries = await Question.find()
     return res.status(200).json(queries);
 }
 

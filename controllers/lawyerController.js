@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 const UserHelper = require('../helpers/userHelper');
 const Token = require('../models/tokenModel');
 const EmailHelper = require('../utils/emailHelper');
-const Question = require('../models/question')
+const Question = require('../models/questionModel')
 const Lawyer = require('../models/lawyerModel')
 const HireLawyer = require('../models/hireLawyer')
+const Product = require('../models/product')
 const LawyerHelper = require('../helpers/lawyerHelper')
-
+const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const req = require("express/lib/request");
 const res = require('express/lib/response');
@@ -130,4 +131,73 @@ exports.addCase = async () => {
 
 // };
 
+exports.addProduct = async(req,res)=>{
+    let lawyerId = req.body.lawyerId
+    const findLawyer = await Lawyer.find({lawyerId:lawyerId})
+    if(!findLawyer){
+        return res.status(400).json("No User Found")
+    }
+    let pName = req.body.pName
+    let pPrice = req.body.pPrice
+    let sellerName = req.body.sellerName
+    let quantity = req.body.quantity
+    if(!(pPrice && quantity && pName)){
+return res.status(200).json("something missing")
+    }
+    const addP = new Product({
+        _id: new mongoose.Types.ObjectId(),
+        quantity :quantity,
+        pName:pName,
+        pPrice:pPrice,
+        sellerName:sellerName,
+    lawyerId:lawyerId
+    })
+    await addP.save()
+    return res.status(200).json("SucessFully Added")
+}
 
+exports.getUserbyId = async(req,res)=>{
+    let userId = req.body.userId
+    const findUser = await User.find({_id:userId})
+    if(findUser.length === 0 ){
+        return res.status(400).json("User does not exist")
+    }
+    return res.status(200).json(findUser);
+}
+
+exports.viewAllProducts = async(req,res)=>{
+    let request = req.body;
+    let products = [];
+    products = await Product.find()
+    return res.status(200).json(products);
+}
+
+exports.editProduct = async(req,res)=>{
+let lawyerId = req.body.lawyerId
+const findLawyer = await Lawyer.find({_id:lawyerId})
+if(!findLawyer){
+    return res.status(400).json("User doesnot exists")
+}
+const edit = {
+    quantity : req.body.quantity || findLawyer.quantity,
+   pName : req.body.pName || findLawyer.pName,  
+   pPrice : req.body.pName || findLawyer.pPrice,
+   sellerName: req.body.sellerName || findLawyer.sellerName
+}
+await Product.updateOne({_id:lawyerId},{$set:{edit}})
+return res.status(200).json("Updated")
+};
+
+//Not Checked//
+exports.deleteProduct = async(req,res)=>{
+    let lawyerId = req.body.lawyerId
+    const findLawyer = await Lawyer.find();
+    if(!findLawyer){
+        return res.status(404).json("Lawyer Doesnot Exists")
+    }
+    const del = {
+        isDeleted :true
+    }
+    await Product.updateOne({_id:lawyerId},{$set:{del}})
+    return res.status(200).json("Product Deleted")
+}
