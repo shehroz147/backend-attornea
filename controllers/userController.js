@@ -219,3 +219,9 @@ exports.viewLawyers = async (req, res) => {
     lawyerList = await Lawyer.find();
     return res.status(200).json(lawyerList);
 }
+exports.viewqueries = async(req,res)=>{
+
+    const question = await Question.find();
+    return res.status(200).json(question);
+
+}
