@@ -120,13 +120,13 @@ exports.login = async (req, res) => {
 
     return res.status(200).json("Successful");
 };
-
+//checked
 exports.askQuestion = async (req, res) => {
 
     let userId = req.body.userId
-    const findUser = await User.find({ _id: userId })
+    const findUser = await User.find({_id:userId })
     console.log(findUser)
-    if (findUser.length === 0) {
+    if (!findUser) {
         return res.status(400).json("User doesnot Exists")
     }
     let province = req.body.province
@@ -139,6 +139,7 @@ exports.askQuestion = async (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         city: city,
         title: title,
+        province:province,
         areaOfLaw: areaOfLaw,
         description: description,
         userId: userId

@@ -4,6 +4,7 @@ const productSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     pName:{type:String,required:true},
     pPrice:{type:Number,required:true},
+    title:{type:String},
     sellerName:{type:String,required:true},
     lawyerId:{type:mongoose.Schema.Types.ObjectId, ref:'Lawyer'},
     userId:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
