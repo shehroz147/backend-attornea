@@ -7,13 +7,13 @@ exports.sendEmail = async (email, text) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'shehroz.virk147@gmail.com',
-                pass: 'ezLctGYh_1012',
+                user: 'attornea@gmail.com',
+                pass: 'attornea@10',
             },
         });
 
         await transporter.sendMail({
-            from: 'shehroz.virk147@gmail.com',
+            from: 'attornea@gmail.com',
             to: email,
             subject: 'Confirmation email',
             text: text,
