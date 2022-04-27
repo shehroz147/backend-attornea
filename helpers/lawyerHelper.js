@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Models
-const Lawyer = require("../models");
+const Lawyer = require("../models/lawyerModel");
 const Case = require('../models/caseModel');
 
 

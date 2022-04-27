@@ -17,5 +17,6 @@ router.post('/talk', UserController.talk)
 router.post('/viewLawyers', UserController.viewLawyers);
 router.post('/userData', UserController.getUserData);
 
+router.post('/viewqueries', UserController.viewqueries);
 
 module.exports = router;
