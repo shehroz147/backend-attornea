@@ -219,3 +219,17 @@ exports.viewLawyers = async (req, res) => {
     lawyerList = await User.find();
     return res.status(200).json(lawyerList);
 }
+
+exports.getUserData = async (req, res) => {
+    let request = req.body;
+    let email = request.email;
+    console.log(request);
+    const findUser = await User.find({ email: email });
+    console.log(findUser)
+    if (findUser === null) {
+        return res.status(400).json("User with thhis email doesnot exist")
+    }
+    else {
+        return res.status(200).json(findUser);
+    }
+}
