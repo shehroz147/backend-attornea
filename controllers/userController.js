@@ -216,6 +216,6 @@ exports.viewRecentQuestions = async (req, res) => {
 exports.viewLawyers = async (req, res) => {
     let request = req.body;
     let lawyerList = [];
-    lawyerList = await Lawyer.find();
+    lawyerList = await User.find();
     return res.status(200).json(lawyerList);
 }
