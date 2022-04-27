@@ -42,7 +42,7 @@ exports.registerUser = async (req, res) => {
         token: data,
     }).save();
 
-    const message = `http://localhost:4000/user/verify/${user._id}/${token.token}`;
+    const message = `https://attor-back.herokuapp.com/user/verify/${user._id}/${token.token}`;
     await EmailHelper.sendEmail(user.email, message);
     return res.status(200).json("Successful");
 };
