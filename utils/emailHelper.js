@@ -3,17 +3,17 @@ const nodemailer = require("nodemailer");
 exports.sendEmail = async (email, text) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
+            host: process.env.HOST,
             port: 465,
             secure: true,
             auth: {
-                user: 'attornea@gmail.com',
-                pass: 'attornea@10',
+                user: process.env.USER,
+                pass: process.env.PASS,
             },
         });
 
         await transporter.sendMail({
-            from: 'attornea@gmail.com',
+            from: process.env.USER,
             to: email,
             subject: 'Confirmation email',
             text: text,
