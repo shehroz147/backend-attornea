@@ -56,9 +56,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/user", userRoutes);
-app.use('/lawyer', lawyerRoutes)
-app.use('/products', productRoutes);
+app.use("user", userRoutes);
+app.use('lawyer', lawyerRoutes)
+app.use('products', productRoutes);
 
 app.use((req, res, next) => {
     const error = new Error("Not found");
@@ -76,5 +76,5 @@ app.use((error, req, res, next) => {
 });
 
 
-server.listen(4000, () => console.log("Server is up on port " + `4000`));
+server.listen(process.env.PORT, () => console.log("Server is up on port " + `4000`));
 module.exports = app;
