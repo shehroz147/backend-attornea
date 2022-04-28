@@ -57,9 +57,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('user', userRoutes);
-app.use('lawyer', lawyerRoutes)
-app.use('products', productRoutes);
+app.use('/user', userRoutes);
+app.use('/lawyer', lawyerRoutes)
+app.use('/products', productRoutes);
 
 app.use((req, res) => {
     const error = new Error("Not found");
