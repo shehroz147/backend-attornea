@@ -16,7 +16,6 @@ router.post("/hire", UserController.hire)
 router.post('/talk', UserController.talk)
 router.post('/viewLawyers', UserController.viewLawyers);
 router.post('/userData', UserController.getUserData);
-
 router.post('/viewqueries', UserController.viewqueries);
-
+// router.post('/addQuestion',UserController.askQuestion)
 module.exports = router;
