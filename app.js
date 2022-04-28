@@ -7,6 +7,7 @@ dotenv.config();
 const mongoose = require('mongoose');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const moment = require('moments')
 
 //Required Routes
 const userRoutes = require("./routes/userRoutes");
@@ -76,5 +77,5 @@ app.use((error, req, res, next) => {
 });
 
 
-server.listen(process.env.PORT, () => console.log("Server is up on port " + `4000`));
+server.listen(4000, () => console.log("Server is up on port " + `4000`));
 module.exports = app;
