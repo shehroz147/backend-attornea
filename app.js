@@ -76,5 +76,5 @@ app.use((error, req, res, next) => {
 });
 
 
-server.listen(process.env.PORT, () => console.log("Server is up on port " + `4000`));
+app.listen(process.env.PORT, () => console.log("Server is up on port " + `4000`));
 module.exports = app;
