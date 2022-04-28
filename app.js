@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
-const http = require("http");
+const https = require("https");
 const dotenv = require("dotenv");
 dotenv.config();
 const mongoose = require('mongoose');
@@ -19,7 +19,7 @@ const options = {
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 app.use(express.json());
-const server = process.env.MODE == "DEV" ? http.createServer(app) : http.createServer(options, app);
+const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
 
 // const url = 'mongodb+srv://nikita:Restart987@test.yxvwr.mongodb.net/test';
 const url = 'mongodb+srv://zeeshan:Attornea@attornea.1s7ub.mongodb.net/test';
