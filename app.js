@@ -56,7 +56,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("user", userRoutes);
+app.use('user', userRoutes);
 app.use('lawyer', lawyerRoutes)
 app.use('products', productRoutes);
 
