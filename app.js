@@ -3,7 +3,7 @@ const fs = require("fs");
 const app = express();
 const https = require("https");
 const dotenv = require("dotenv");
-dotenv.config();
+const env = dotenv.config();
 const mongoose = require('mongoose');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -19,7 +19,8 @@ const options = {
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 app.use(express.json());
-const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
+const server = https.createServer(app);
+// const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
 
 // const url = 'mongodb+srv://nikita:Restart987@test.yxvwr.mongodb.net/test';
 const url = 'mongodb+srv://zeeshan:Attornea@attornea.1s7ub.mongodb.net/test';
@@ -60,13 +61,13 @@ app.use('user', userRoutes);
 app.use('lawyer', lawyerRoutes)
 app.use('products', productRoutes);
 
-app.use((req, res, next) => {
+app.use((req, res) => {
     const error = new Error("Not found");
     error.status = 404;
-    next(error);
+    res(error);
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
     res.status(error.status || 500);
     res.json({
         error: {
