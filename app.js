@@ -63,9 +63,9 @@ app.use('/Assets', express.static('Assets'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/user', userRoutes);
-app.use('/lawyer', lawyerRoutes)
-app.use('/products', productRoutes);
+app.use('user', userRoutes);
+app.use('lawyer', lawyerRoutes)
+app.use('products', productRoutes);
 
 app.use((req, res) => {
     const error = new Error("Not found");
