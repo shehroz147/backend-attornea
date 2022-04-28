@@ -11,9 +11,9 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const req = require("express/lib/request");
 const res = require('express/lib/response');
+const Case = require("../models/caseModel");
 
-
-exports.addCase = async () => {
+exports.addCase = async (req, res) => {
     let request = req.body;
     const addingCase = await LawyerHelper.addCase(request);
     return res.status(200).json("Successfully added case");
@@ -131,114 +131,119 @@ exports.addCase = async () => {
 
 // };
 
-exports.addProduct = async(req,res)=>{
+exports.addProduct = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find({lawyerId:lawyerId})
-    if(!findLawyer){
+    const findLawyer = await Lawyer.find({ lawyerId: lawyerId })
+    if (!findLawyer) {
         return res.status(400).json("No User Found")
     }
     let pName = req.body.pName
     let pPrice = req.body.pPrice
     let sellerName = req.body.sellerName
     let quantity = req.body.quantity
-    if(!(pPrice && quantity && pName)){
-return res.status(200).json("something missing")
+    if (!(pPrice && quantity && pName)) {
+        return res.status(200).json("something missing")
     }
     const addP = new Product({
         _id: new mongoose.Types.ObjectId(),
-        quantity :quantity,
-        pName:pName,
-        pPrice:pPrice,
-        sellerName:sellerName,
-    lawyerId:lawyerId
+        quantity: quantity,
+        pName: pName,
+        pPrice: pPrice,
+        sellerName: sellerName,
+        lawyerId: lawyerId
     })
     await addP.save()
     return res.status(200).json("SucessFully Added")
 }
 
-exports.getUserbyId = async(req,res)=>{
+exports.getUserbyId = async (req, res) => {
     let userId = req.body.userId
-    const findUser = await User.find({_id:userId})
-    if(findUser.length === 0 ){
+    const findUser = await User.find({ _id: userId })
+    if (findUser.length === 0) {
         return res.status(400).json("User does not exist")
     }
     return res.status(200).json(findUser);
 }
 
-exports.viewAllProducts = async(req,res)=>{
+exports.viewAllProducts = async (req, res) => {
     let request = req.body;
     let products = [];
     products = await Product.find()
     return res.status(200).json(products);
 }
 
-exports.editProduct = async(req,res)=>{
-let lawyerId = req.body.lawyerId
-const findLawyer = await Lawyer.find({_id:lawyerId})
-if(!findLawyer){
-    return res.status(400).json("User doesnot exists")
-}
-const edit = {
-    quantity : req.body.quantity || findLawyer.quantity,
-   pName : req.body.pName || findLawyer.pName,  
-   pPrice : req.body.pName || findLawyer.pPrice,
-   sellerName: req.body.sellerName || findLawyer.sellerName
-}
-await Product.updateOne({_id:lawyerId},{$set:{edit}})
-return res.status(200).json("Updated")
+exports.editProduct = async (req, res) => {
+    let lawyerId = req.body.lawyerId
+    const findLawyer = await Lawyer.find({ _id: lawyerId })
+    if (!findLawyer) {
+        return res.status(400).json("User doesnot exists")
+    }
+    const edit = {
+        quantity: req.body.quantity || findLawyer.quantity,
+        pName: req.body.pName || findLawyer.pName,
+        pPrice: req.body.pName || findLawyer.pPrice,
+        sellerName: req.body.sellerName || findLawyer.sellerName
+    }
+    await Product.updateOne({ _id: lawyerId }, { $set: { edit } })
+    return res.status(200).json("Updated")
 };
 
 //Not Checked//
-exports.deleteProduct = async(req,res)=>{
+exports.deleteProduct = async (req, res) => {
     let lawyerId = req.body.lawyerId
     const findLawyer = await Lawyer.find();
-    if(!findLawyer){
+    if (!findLawyer) {
         return res.status(404).json("Lawyer Doesnot Exists")
     }
     const del = {
-        isDeleted :true
+        isDeleted: true
     }
-    await Product.updateOne({_id:lawyerId},{$set:{del}})
+    await Product.updateOne({ _id: lawyerId }, { $set: { del } })
     return res.status(200).json("Product Deleted")
 }
 
 
 
 
-exports.updateProfile = async(req,res)=>{
+exports.updateProfile = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await User.find({lawyerId:req.body._id})
-    if(!findLawyer)
-    {
+    const findLawyer = await User.find({ lawyerId: req.body._id })
+    if (!findLawyer) {
         return res.status(400).json("Lawyer Doesnot exists")
     }
     const update = {
-     email : req.body.email || findLawyer.email,
-    gender : req.body.gender || findLawyer.gender,
-    lisenseNo: req.body.lisenseNo || findLawyer.lisenseNo,
-    bio: req.body.bio || findLawyer.bio,
-    workExperience: req.body.workExperience || findLawyer.workExperience,
-    education : req.body.education || findLawyer.education,
-    praticeArea : req.body.praticeArea || findLawyer.praticeArea
+        email: req.body.email || findLawyer.email,
+        gender: req.body.gender || findLawyer.gender,
+        lisenseNo: req.body.lisenseNo || findLawyer.lisenseNo,
+        bio: req.body.bio || findLawyer.bio,
+        workExperience: req.body.workExperience || findLawyer.workExperience,
+        education: req.body.education || findLawyer.education,
+        praticeArea: req.body.praticeArea || findLawyer.praticeArea
     }
-    await Lawyer.updateOne({lawyerId:req.body._id},{$set:{update}})
+    await Lawyer.updateOne({ lawyerId: req.body._id }, { $set: { update } })
     return res.status(200).json("Lawyer Info Updated")
 }
 
 
-exports.removeLawyer = async (req,res) => {
-let lawyerId = req.body.lawyerId
-const findLawyer = await Lawyer.find({lawyerId:req.body._id})
-if(!findLawyer){
-return res.status(404).json("No Lawyer Found")
-}
+exports.removeLawyer = async (req, res) => {
+    let lawyerId = req.body.lawyerId
+    const findLawyer = await Lawyer.find({ lawyerId: req.body._id })
+    if (!findLawyer) {
+        return res.status(404).json("No Lawyer Found")
+    }
     let updateInfo = {
-		isDeleted 	: true,
-		// deletedAt 	: moment()
-	}
+        isDeleted: true,
+        // deletedAt 	: moment()
+    }
 
-	// for(let i=0;i<ids.length;i++){
-		await User.updateOne({lawyerId:req.body._id},{$set: updateInfo});
-	// }
+    // for(let i=0;i<ids.length;i++){
+    await User.updateOne({ lawyerId: req.body._id }, { $set: updateInfo });
+    // }
     return res.status(200).json("Lawyer Deleted")
+}
+
+
+exports.getCases = async (req, res) => {
+    const cases = await Case.find();
+    return res.status(200).json(cases);
 }

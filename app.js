@@ -7,11 +7,10 @@ dotenv.config();
 const mongoose = require('mongoose');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const moment = require('moments')
+
 
 //Required Routes
 const userRoutes = require("./routes/userRoutes");
-const res = require("express/lib/response");
 const lawyerRoutes = require('./routes/lawyerRoutes');
 const productRoutes = require('./routes/productRoutes');
 

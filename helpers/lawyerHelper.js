@@ -15,26 +15,19 @@ exports.findLawyerPass = async (email, pass) => {
 
 
 exports.addCase = async (request) => {
+    console.log(request);
     const myCase = new Case({
         _id: new mongoose.Types.ObjectId(),
-        caseStatus: request.caseStatus,
-        caseClient: request.caseClient,
-        caseName: request.caseClient,
-        caseNumber: request.caseNumber,
-        caseData: request.caseData,
-        caseRemarks: request.caseRemarks,
-        caseType: request.caseType,
-        caseFee: request.caseFee,
-        caseCharges: request.caseCharges,
-        casePatitioner: request.casePatitioner,
-        caseRespondor: request.caseRespondor,
-        caseDescription: request.caseDescription,
-        opponentName: request.opponentName,
-        opponentLawyer: request.opponentLawyer,
-        opponentNumber: request.opponentNumber,
+        title: request.title,
+        // caseClient: request.caseClient,
+        // name: request.name,
+        category: request.category,
+        // caseNumber: request.caseNumber,
+        stage: request.stage,
+        nextHiring: request.nextHiring,
+        previousHiring: request.previousHiring,
+        notes: request.notes,
         courtName: request.courtName,
-        courtCity: request.courtCity,
-        judgeName: request.judgeName
     })
     return await myCase.save();
 
