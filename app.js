@@ -16,7 +16,7 @@ const port = process.env.PORT || 4000;
 const userRoutes = require("./routes/userRoutes");
 const lawyerRoutes = require('./routes/lawyerRoutes');
 const productRoutes = require('./routes/productRoutes');
-
+const blawgRoutes = require("./routes/blawgRoutes");
 const options = {
     key: fs.existsSync(process.env.SSL_KEY) ? fs.readFileSync(process.env.SSL_KEY) : null,
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/lawyer", lawyerRoutes)
 app.use("/products", productRoutes);
-
+app.use("/blawgs", blawgRoutes);
 app.use((req, res) => {
     const error = new Error("Not found");
     error.status = 404;
