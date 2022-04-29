@@ -5,8 +5,9 @@ const productSchema = mongoose.Schema({
     name: { type: String, required: true },
     price: { type: Number, required: true },
     title: { type: String },
-    sellerName: { type: String, required: true },
+    sellerName: { type: String },
     quantity: { type: String },
+    description: { type: String },
     image: { type: String },
     isDeleted: { type: Boolean, default: "false" },
     deletedAt: { type: Date, default: null }

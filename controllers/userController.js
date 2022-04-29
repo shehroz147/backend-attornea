@@ -242,3 +242,25 @@ exports.viewqueries = async (req, res) => {
     return res.status(200).json(question);
 
 }
+
+exports.updateUser = async (req, res) => {
+    let request = req.body;
+    let email = req.body.email;
+    const findUser = await User.find({ email: email });
+    const updateInfo = {
+        firstName: req.body.firstName || findUser.firstName,
+        gender: req.body.gender || findUser.gender,
+        bio: req.body.bio || findUser.bio
+    }
+    await User.updateOne({ email: request.email }, { $set: updateInfo })
+        .exec()
+        .then(docs => {
+            result = docs;
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+    return res.status(200).json("successfull");
+}

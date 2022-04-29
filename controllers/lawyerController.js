@@ -203,16 +203,15 @@ exports.deleteProduct = async (req, res) => {
 }
 
 
-
-
 exports.updateProfile = async (req, res) => {
     let result;
-    let lawyerId = req.body._id
-    const findLawyer = await Lawyer.find({ _id: lawyerId })
+    // let lawyerId = req.body._id
+    const findLawyer = await Lawyer.find({ email: req.body.email })
     if (findLawyer.length === 0) {
         return res.status(400).json("Lawyer Doesnot exists")
     }
     const update = {
+        firstName: req.body.firstName || findLawyer.firstName,
         email: req.body.email || findLawyer.email,
         gender: req.body.gender || findLawyer.gender,
         lisenseNo: req.body.lisenseNo || findLawyer.lisenseNo,
@@ -221,7 +220,7 @@ exports.updateProfile = async (req, res) => {
         education: req.body.education || findLawyer.education,
         praticeArea: req.body.praticeArea || findLawyer.praticeArea
     }
-    await Lawyer.updateOne({ _id: req.body._id }, { $set: update })
+    await Lawyer.updateOne({ email: req.body.email }, { $set: update })
         .exec()
         .then(docs => {
             result = docs;

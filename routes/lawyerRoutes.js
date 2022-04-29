@@ -21,5 +21,5 @@ router.post('/viewAllProducts', LawyerController.viewAllProducts)
 router.post('/editProducts', LawyerController.editProduct)
 router.post('/updateProfile', LawyerController.updateProfile)
 router.post('/removeLawyer', LawyerController.removeLawyer)
-
+router.post('/setProfile', LawyerController.updateProfile);
 module.exports = router;

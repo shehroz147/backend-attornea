@@ -17,4 +17,5 @@ router.post('/viewLawyers', UserController.viewLawyers);
 router.post('/userData', UserController.getUserData);
 router.post('/viewqueries', UserController.viewqueries);
 // router.post('/addQuestion',UserController.askQuestion)
+router.post("/setProfile", UserController.updateUser);
 module.exports = router;
