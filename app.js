@@ -2,8 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const https = require("https");
-const dotenv = require("dotenv");
-const env = dotenv.config();
+const env = require("dotenv").config();
 const mongoose = require('mongoose');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -23,7 +22,7 @@ const options = {
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 
-const server = process.env.MODE == "DEV" ? http.createServer(app) : https.createServer(options, app);
+const server = process.env.MODE == "DEV" ? http.createServer(app) : http.createServer(options, app);
 
 
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
@@ -43,11 +42,18 @@ mongoose.connect(url, { useNewUrlParser: true }, (err) => {
 mongoose.Promise = global.Promise;
 
 // Middlewears 
+
+app.use(morgan("dev"));
+app.use('/Uploads', express.static('Uploads'));
+app.use('/Assets', express.static('Assets'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
         "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization, Content-Type, Signature"
     );
 
     if (req.method === "OPTIONS") {
@@ -57,15 +63,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(morgan("dev"));
-app.use('/Uploads', express.static('Uploads'));
-app.use('/Assets', express.static('Assets'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.use('user', userRoutes);
-app.use('lawyer', lawyerRoutes)
-app.use('products', productRoutes);
+app.use("/user", userRoutes);
+app.use("/lawyer", lawyerRoutes)
+app.use("/products", productRoutes);
 
 app.use((req, res) => {
     const error = new Error("Not found");
