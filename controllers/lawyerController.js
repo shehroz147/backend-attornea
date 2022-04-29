@@ -206,9 +206,10 @@ exports.deleteProduct = async (req, res) => {
 
 
 exports.updateProfile = async (req, res) => {
-    let lawyerId = req.body.lawyerId
-    const findLawyer = await User.find({ lawyerId: req.body._id })
-    if (!findLawyer) {
+    let result;
+    let lawyerId = req.body._id
+    const findLawyer = await Lawyer.find({ _id: lawyerId })
+    if (findLawyer.length === 0) {
         return res.status(400).json("Lawyer Doesnot exists")
     }
     const update = {
@@ -220,14 +221,23 @@ exports.updateProfile = async (req, res) => {
         education: req.body.education || findLawyer.education,
         praticeArea: req.body.praticeArea || findLawyer.praticeArea
     }
-    await Lawyer.updateOne({ lawyerId: req.body._id }, { $set: { update } })
+    await Lawyer.updateOne({ _id: req.body._id }, { $set: update })
+        .exec()
+        .then(docs => {
+            result = docs;
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
     return res.status(200).json("Lawyer Info Updated")
 }
 
 
 exports.removeLawyer = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find({ lawyerId: req.body._id })
+    const findLawyer = await Lawyer.find({ _id: req.body._id })
     if (!findLawyer) {
         return res.status(404).json("No Lawyer Found")
     }
@@ -237,7 +247,15 @@ exports.removeLawyer = async (req, res) => {
     }
 
     // for(let i=0;i<ids.length;i++){
-    await User.updateOne({ lawyerId: req.body._id }, { $set: updateInfo });
+    await User.updateOne({ _id: req.body._id }, { $set: updateInfo }).exec()
+        .then(docs => {
+            result = docs;
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });;
     // }
     return res.status(200).json("Lawyer Deleted")
 }
