@@ -6,8 +6,12 @@ const User = require("../models/userModel");
 
 
 
-exports.findUser = async (email) => {
-    return await User.find({ email: email }, { isVerified: true });
+exports.findUser = async (email, password) => {
+    return await User.find({
+        email: email,
+        isVerified: true,
+        password: password
+    });
 }
 
 exports.findUserPass = async (email, pass) => {

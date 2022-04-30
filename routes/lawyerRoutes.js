@@ -22,4 +22,5 @@ router.post('/editProducts', LawyerController.editProduct)
 router.post('/updateProfile', LawyerController.updateProfile)
 router.post('/removeLawyer', LawyerController.removeLawyer)
 router.post('/setProfile', LawyerController.updateProfile);
+router.post("/lawyerData", LawyerController.getLawyerData);
 module.exports = router;

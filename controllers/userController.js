@@ -114,7 +114,8 @@ exports.login = async (req, res) => {
         return res.status(400).json("Email doesnot exists");
     }
     let checkPassword = await UserHelper.findUser(email, password);
-    if (checkPassword === null) {
+    console.log(checkPassword);
+    if (checkPassword.length === 0) {
         return res.status(400).json("Invalid password");
     }
 
@@ -134,7 +135,8 @@ exports.askQuestion = async (req, res) => {
     let title = req.body.title
     let areaOfLaw = req.body.areaOfLaw
     let description = req.body.description
-
+    let email = req.body.email;
+    // const findUser = await User.find({ email: email });
     const ques = new Question({
         _id: new mongoose.Types.ObjectId(),
         city: city,
@@ -142,9 +144,10 @@ exports.askQuestion = async (req, res) => {
         province: province,
         areaOfLaw: areaOfLaw,
         description: description,
-        // userId: userId
+        userEmail: email
     })
-    await ques.save()
+    await ques.save();
+    // await Question.find({ _id: ques._id }).populate("userId");
     return res.status(200).json("Question Posted")
 }
 
@@ -217,17 +220,17 @@ exports.viewRecentQuestions = async (req, res) => {
 exports.viewLawyers = async (req, res) => {
     let request = req.body;
     let lawyerList = [];
-    lawyerList = await User.find().limit(6);
+    lawyerList = await User.find().limit(6).sort({ createdAt: -1 });
     return res.status(200).json(lawyerList);
 }
 
 exports.getUserData = async (req, res) => {
     let request = req.body;
-    console.log(req.body);
+    console.log(req.body.email);
     let email = request.email;
-    console.log(request);
+    // console.log(request);
     let findUser = await User.find({ email: email });
-    console.log(findUser[0])
+    // console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
     }
@@ -238,7 +241,8 @@ exports.getUserData = async (req, res) => {
 
 exports.viewqueries = async (req, res) => {
 
-    const question = await Question.find().limit(6);
+    const question = await Question.find().limit(6).sort({ createdAt: -1 });
+    console.log(question);
     return res.status(200).json(question);
 
 }
@@ -263,4 +267,20 @@ exports.updateUser = async (req, res) => {
             });
         });
     return res.status(200).json("successfull");
+}
+
+exports.showMyQuestions = async (req, res) => {
+
+    const question = await Question.find({ userEmail: req.body.email }).sort({ createdAt: -1 });
+    return res.status(200).json(question);
+
+}
+
+exports.showAllUsers = async (req, res) => {
+
+    let users = await User.find().sort({ createdAt: -1 });
+    let lawyers = await Lawyer.find().sort({ createdAt: -1 });
+    Array.prototype.push.apply(users, lawyers);
+    return res.status(200).json(users);
+
 }

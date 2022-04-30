@@ -19,6 +19,21 @@ exports.addCase = async (req, res) => {
     return res.status(200).json("Successfully added case");
 
 }
+
+exports.getLawyerData = async (req, res) => {
+    let request = req.body;
+    console.log(req.body.email);
+    let email = request.email;
+    // console.log(request);
+    let findUser = await Lawyer.find({ email: email });
+    // console.log(findUser[0])
+    if (findUser === null) {
+        return res.status(400).json("User with thhis email doesnot exist")
+    }
+    else {
+        return res.status(200).json(findUser[0]);
+    }
+}
 // exports.registerUser = async (req, res) => {
 //     let request = req.body;
 //     console.log(request);

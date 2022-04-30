@@ -13,6 +13,7 @@ const http = require('http');
 const port = process.env.PORT || 4000;
 
 //Required Routes
+const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lawyerRoutes = require('./routes/lawyerRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -62,7 +63,7 @@ app.use((req, res, next) => {
     }
     next();
 });
-
+app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/lawyer", lawyerRoutes)
 app.use("/products", productRoutes);
