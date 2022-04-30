@@ -8,7 +8,8 @@ const jwt = require("jsonwebtoken");
 const Talk = require('../models/talk')
 const hireLawyer = require("../models/hireLawyer");
 const Lawyer = require('../models/lawyerModel');
-
+const Post = require("../models/postModel");
+const { findLawyer } = require("../helpers/lawyerHelper");
 
 exports.registerUser = async (req, res) => {
     let request = req.body;
@@ -111,7 +112,19 @@ exports.login = async (req, res) => {
     let checkEmail = await UserHelper.findUser(email);
     // console.log(checkEmail);
     if (checkEmail === null) {
-        return res.status(400).json("Email doesnot exists");
+        findLawyer = await Lawyer.find({ email: email });
+        if (findLawyer.length === 0) {
+            return res.status(400).json("Email doesnot exists");
+        }
+        else {
+            let checkLawyer = await Lawyer.find({ email: email, password: password });
+            if (checkLawyer.length === 0) {
+                return res.status(400).json("Password Invalid")
+            }
+            else {
+                return res.status(200).json("successfully logged in");
+            }
+        }
     }
     let checkPassword = await UserHelper.findUser(email, password);
     console.log(checkPassword);
@@ -282,5 +295,21 @@ exports.showAllUsers = async (req, res) => {
     let lawyers = await Lawyer.find().sort({ createdAt: -1 });
     Array.prototype.push.apply(users, lawyers);
     return res.status(200).json(users);
+
+}
+
+
+exports.addPost = async (req, res) => {
+
+    let data = req.body.data;
+    const post = new Post({
+        _id: new mongoose.Types.ObjectId(),
+        data: data
+    });
+    await post.save();
+    return res.status(200).json("success");
+    // const post = await Question.find().limit(6).sort({ createdAt: -1 });
+    // console.log(question);
+    // return res.status(200).json(question);
 
 }

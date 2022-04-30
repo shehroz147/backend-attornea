@@ -279,3 +279,88 @@ exports.getCases = async (req, res) => {
     const cases = await Case.find();
     return res.status(200).json(cases);
 }
+
+
+exports.registerLawyer = async (req, res) => {
+    let request = req.body;
+    console.log(request);
+    let email = request.email;
+    let password = request.password;
+    let firstName = request.firstName;
+    let lastName = request.lastName;
+
+    let credentialsCheck = await this.checkCredentials(firstName, lastName, email.toLowerCase(), password);
+    if (!credentialsCheck) {
+        return res.status(400).json("Missing required information")
+    }
+
+    let checkEmail = await UserHelper.findUser(email.toLowerCase());
+    // console.log(checkEmail);
+    if (!(checkEmail.length === 0)) {
+        return res.status(400).json("Email already exists");
+    }
+    const user = new Lawyer({
+        _id: new mongoose.Types.ObjectId(),
+        email: email.toLowerCase(),
+        password: password,
+        firstName: firstName,
+        lastName: lastName
+    });
+    await user.save();
+    const data = await this.tokenCreater(email);
+    let token = await new Token({
+        userId: user._id,
+        token: data,
+    }).save();
+
+    const message = `https://attor-back.herokuapp.com/user/verify/${user._id}/${token.token}`;
+    await EmailHelper.sendEmail(user.email, message);
+    return res.status(200).json("Successful");
+};
+
+
+exports.checkCredentials = async (firstName, lastName, email, password) => {
+    if (!firstName || !lastName || !email || !password) {
+        return false;
+    }
+    return true;
+}
+
+
+
+exports.tokenCreater = async (email) => {
+    return jwt.sign({
+        iss: 'Attornea',
+        sub: email,
+        iat: new Date().getTime(), // current time
+        exp: Math.floor(Date.now() / 1000) + (60 * 60)// 60 minutes
+    }, process.env.JWT_SECRET || 'Attornea123$');
+}
+
+
+exports.decodeToken = async (token) => {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+        return err;
+    }
+}
+
+
+exports.verifyEmail = async (req, res) => {
+
+    const user = await Lawyer.findOne({ _id: req.params.id });
+    if (!user) return res.status(400).send("Invalid link");
+
+    const token = await Token.findOne({
+        userId: user._id,
+        token: req.params.token,
+    });
+    if (!token) return res.status(400).send("Invalid link");
+
+    await Lawyer.updateOne({ _id: user._id }, { isVerified: true });
+    await Token.findByIdAndRemove(token._id);
+
+    res.status(200).json("email verified sucessfully");
+
+}

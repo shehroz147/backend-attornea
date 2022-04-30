@@ -9,6 +9,8 @@ const LawyerController = require('../controllers/lawyerController');
 
 // Routes
 router.post("/addCase", LawyerController.addCase);
+router.post("/register", LawyerController.registerLawyer);
+router.get("/verify/:id/:token", LawyerController.verifyEmail);
 // router.get("/verify/:id/:token", UserController.verifyEmail);
 // router.post("/login", UserController.login);
 // router.post("/postQuestion", UserController.askQuestion)

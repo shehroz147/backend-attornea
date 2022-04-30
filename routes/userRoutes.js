@@ -19,4 +19,5 @@ router.post('/viewqueries', UserController.viewqueries);
 router.post("/showMyQuestions", UserController.showMyQuestions);
 // router.post('/addQuestion',UserController.askQuestion)
 router.post("/setProfile", UserController.updateUser);
+router.post("/addPost", UserController.addPost);
 module.exports = router;
