@@ -12,12 +12,42 @@ const jwt = require("jsonwebtoken");
 const req = require("express/lib/request");
 const res = require('express/lib/response');
 const Case = require("../models/caseModel");
+const Citation = require("../models/citationModel");
 
 exports.addCase = async (req, res) => {
     let request = req.body;
     const addingCase = await LawyerHelper.addCase(request);
     return res.status(200).json("Successfully added case");
 
+}
+
+exports.addComment = async (req, res) => {
+    let request = req.body;
+    console.log(request);
+    let questionId = request._id;
+    let findQuestion = await Question.find({ _id: questionId });
+    let comment = {
+        user: request.userId,
+        details: request.description
+    };
+    let addComment = await Question.updateOne({ _id: questionId }, { $push: { comments: comment } })
+    return res.status(200).json("successfull");
+    // return User.updateOne(user, { $push: { friends: { friend } } });
+    // let user = await UserHelper.findUserByUserName(request.userName);
+    // if (user == null) {
+    //     this.noSuchUserResponse(req, res);
+    // } else {
+    //     let findRequest = await UserHelper.findRequest(user._id);
+    //     if (findRequest == null) {
+    //         this.noSuchRequestResponse(req, res);
+    //     } else {
+    //         let myId = await UserHelper.foundUserByEmail(request.email);
+    //         let checkFriend = await UserHelper.findFriend(user.userName, myId);
+    //         let result = await UserHelper.acceptRequest(findRequest);
+    //         let addAsFriend = await UserHelper.addFriend(myId, user, res);
+    //         this.requestSuccessfulResponse(req, res, addAsFriend);
+    //     }
+    // }
 }
 
 exports.getLawyerData = async (req, res) => {
@@ -34,42 +64,32 @@ exports.getLawyerData = async (req, res) => {
         return res.status(200).json(findUser[0]);
     }
 }
-// exports.registerUser = async (req, res) => {
-//     let request = req.body;
-//     console.log(request);
-//     let email = request.email;
-//     let password = request.password;
-//     let firstName = request.firstName;
-//     let lastName = request.lastName;
+exports.citationSearch = async (req, res) => {
+    let request = req.body;
+    // console.log(request);
+    let clcName = request.clcName;
+    let title = request.title;
+    let code = request.code;
+    let tags = request.tags;
+    let headNotes = request.headNotes;
+    let caseDescription = request.caseDescription;
+    let year = request.year;
+    let courtName = request.courtName;
 
-//     let credentialsCheck = await this.checkCredentials(firstName, lastName, email.toLowerCase(), password);
-//     if (!credentialsCheck) {
-//         return res.status(400).json("Missing required information")
-//     }
-
-//     let checkEmail = await LawyerHelper.findUser(email.toLowerCase());
-//     // console.log(checkEmail);
-//     if (!(checkEmail.length === 0)) {
-//         return res.status(400).json("Email already exists");
-//     }
-//     const lawyer = new Lawyer({
-//         _id: new mongoose.Types.ObjectId(),
-//         email: email.toLowerCase(),
-//         password: password,
-//         firstName: firstName,
-//         lastName: lastName
-//     });
-//     await lawyer.save();
-//     const data = await this.tokenCreater(email);
-//     let token = await new Token({
-//      lawyerId: lawyer._id,
-//         token: data,
-//     }).save();
-
-//     const message = `http://localhost:4000/user/verify/${user._id}/${token.token}`;
-//     await EmailHelper.sendEmail(user.email, message);
-//     return res.status(200).json("Successful");
-// };
+    const citation = new Citation({
+        _id: new mongoose.Types.ObjectId(),
+        title: title,
+        clcName: clcName,
+        code: code,
+        tags: tags,
+        headNotes: headNotes,
+        caseDescription: caseDescription,
+        year: year,
+        courtName: courtName
+    });
+    await citation.save();
+    return res.status(200).json("Successful");
+};
 
 
 // exports.checkCredentials = async (firstName, lastName, email, password) => {

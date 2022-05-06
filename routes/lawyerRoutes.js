@@ -25,4 +25,6 @@ router.post('/updateProfile', LawyerController.updateProfile)
 router.post('/removeLawyer', LawyerController.removeLawyer)
 router.post('/setProfile', LawyerController.updateProfile);
 router.post("/lawyerData", LawyerController.getLawyerData);
+router.post("/citationSearch", LawyerController.citationSearch);
+router.post("/addComment", LawyerController.addComment);
 module.exports = router;

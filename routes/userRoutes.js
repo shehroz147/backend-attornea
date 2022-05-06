@@ -20,4 +20,7 @@ router.post("/showMyQuestions", UserController.showMyQuestions);
 // router.post('/addQuestion',UserController.askQuestion)
 router.post("/setProfile", UserController.updateUser);
 router.post("/addPost", UserController.addPost);
+router.post("/getLawyerInfo", UserController.getLawyerData);
+router.post("/deleteQuestion", UserController.deleteQuestion);
+
 module.exports = router;

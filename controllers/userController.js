@@ -48,6 +48,27 @@ exports.registerUser = async (req, res) => {
     return res.status(200).json("Successful");
 };
 
+exports.deleteQuestion = async (req, res) => {
+    const id = req.body.id;
+    console.log(req.body.id);
+    let edit = {
+        isDeleted: true,
+    }
+    // await User.updateOne({ _id: id }, { $set: updateInfo }).exec();
+    await Question.updateOne({ _id: id }, { $set: edit }).exec();
+    return res.status(200).json("success")
+
+}
+
+
+exports.getLawyerData = async (req, res) => {
+    let request = req.body;
+    console.log(request);
+    let email = request.email;
+    const findLawyer = await Lawyer.find({ email: email });
+    return res.status(200).json(findLawyer);
+
+}
 
 exports.checkCredentials = async (firstName, lastName, email, password) => {
     if (!firstName || !lastName || !email || !password) {
@@ -254,7 +275,7 @@ exports.getUserData = async (req, res) => {
 
 exports.viewqueries = async (req, res) => {
 
-    const question = await Question.find().limit(6).sort({ createdAt: -1 });
+    const question = await Question.find({ isDeleted: false }).limit(6).sort({ createdAt: -1 });
     console.log(question);
     return res.status(200).json(question);
 
@@ -284,7 +305,7 @@ exports.updateUser = async (req, res) => {
 
 exports.showMyQuestions = async (req, res) => {
 
-    const question = await Question.find({ userEmail: req.body.email }).sort({ createdAt: -1 });
+    const question = await Question.find({ userEmail: req.body.email, isDeleted: false }).sort({ createdAt: -1 });
     return res.status(200).json(question);
 
 }
