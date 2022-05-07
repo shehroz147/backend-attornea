@@ -8,8 +8,8 @@ const questionSchema = mongoose.Schema({
     city: { type: String },
     areaOfLaw: { type: String },
     comments: {
-        user: { type: String },
-        details: { type: String },
+        user: { type: String, default: null },
+        details: { type: String, default: null },
     },
     title: { type: String },
     description: { type: String },

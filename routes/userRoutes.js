@@ -22,5 +22,6 @@ router.post("/setProfile", UserController.updateUser);
 router.post("/addPost", UserController.addPost);
 router.post("/getLawyerInfo", UserController.getLawyerData);
 router.post("/deleteQuestion", UserController.deleteQuestion);
+router.post("/getCitation", UserController.getCitation);
 
 module.exports = router;

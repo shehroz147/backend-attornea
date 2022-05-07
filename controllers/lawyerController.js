@@ -25,8 +25,8 @@ exports.addComment = async (req, res) => {
     let request = req.body;
     console.log(request);
     let questionId = request._id;
-    let findQuestion = await Question.find({ _id: questionId });
-    let comment = {
+    // let findQuestion = await Question.find({ _id: questionId });
+    const comment = {
         user: request.userId,
         details: request.description
     };

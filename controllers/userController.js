@@ -10,7 +10,7 @@ const hireLawyer = require("../models/hireLawyer");
 const Lawyer = require('../models/lawyerModel');
 const Post = require("../models/postModel");
 const { findLawyer } = require("../helpers/lawyerHelper");
-
+const Citation = require("../models/citationModel");
 exports.registerUser = async (req, res) => {
     let request = req.body;
     console.log(request);
@@ -47,6 +47,12 @@ exports.registerUser = async (req, res) => {
     await EmailHelper.sendEmail(user.email, message);
     return res.status(200).json("Successful");
 };
+
+
+exports.getCitation = async (req, res) => {
+    const getCitation = await Citation.find();
+    return res.status("200").json(getCitation);
+}
 
 exports.deleteQuestion = async (req, res) => {
     const id = req.body.id;
