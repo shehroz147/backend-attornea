@@ -33,7 +33,7 @@ exports.createProduct = async (req, res) => {
 
 exports.viewProducts = async (req, res) => {
 
-    const products = await Product.find().limit(3);
+    const products = await Product.find().limit(4);
     return res.status(200).json(products);
 
 }

@@ -30,7 +30,7 @@ exports.addComment = async (req, res) => {
         user: request.userId,
         details: request.description
     };
-    let addComment = await Question.updateOne({ _id: questionId }, { $set: { comments: comment } })
+    let addComment = await Question.updateOne({ _id: questionId }, { $set: { comments: comment } }).exec();
     return res.status(200).json("successfull");
     // return User.updateOne(user, { $push: { friends: { friend } } });
     // let user = await UserHelper.findUserByUserName(request.userName);
