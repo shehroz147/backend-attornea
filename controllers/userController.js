@@ -164,12 +164,6 @@ exports.login = async (req, res) => {
 //checked
 exports.askQuestion = async (req, res) => {
 
-    // let userId = req.body.userId
-    // const findUser = await User.find({ _id: userId })
-    // console.log(findUser)
-    // if (!findUser) {
-    //     return res.status(400).json("User doesnot Exists")
-    // }
     let province = req.body.province
     let city = req.body.city
     let title = req.body.title
