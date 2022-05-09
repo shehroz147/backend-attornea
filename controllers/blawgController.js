@@ -17,9 +17,16 @@ exports.addBlawgs = async (req, res) => {
 }
 
 
-exports.viewBlawgs = async (req, res) => {
+exports.viewAllBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];
     blawgsList = await Blawgs.find();
+    return res.status(200).json(blawgsList);
+}
+
+exports.viewBlawgs = async (req, res) => {
+    // let request = req.body;
+    let blawgsList = [];
+    blawgsList = await Blawgs.find().limit(4);
     return res.status(200).json(blawgsList);
 }

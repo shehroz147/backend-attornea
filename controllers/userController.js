@@ -149,7 +149,8 @@ exports.login = async (req, res) => {
                 return res.status(400).json("Password Invalid")
             }
             else {
-                return res.status(200).json("successfully logged in");
+                let role = 'lawyer';
+                return res.status(200).json(role);
             }
         }
     }
@@ -158,8 +159,8 @@ exports.login = async (req, res) => {
     if (checkPassword.length === 0) {
         return res.status(400).json("Invalid password");
     }
-
-    return res.status(200).json("Successful");
+    let role = 'user';
+    return res.status(200).json(role);
 };
 //checked
 exports.askQuestion = async (req, res) => {
