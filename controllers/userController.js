@@ -138,29 +138,42 @@ exports.login = async (req, res) => {
 
     let checkEmail = await UserHelper.findUser(email);
     // console.log(checkEmail);
-    if (checkEmail === null) {
-        findLawyer = await Lawyer.find({ email: email });
-        if (findLawyer.length === 0) {
-            return res.status(400).json("Email doesnot exists");
-        }
-        else {
-            let checkLawyer = await Lawyer.find({ email: email, password: password });
-            if (checkLawyer.length === 0) {
-                return res.status(400).json("Password Invalid")
-            }
-            else {
-                let role = 'lawyer';
-                return res.status(200).json(role);
-            }
-        }
+    if (!(checkEmail.length === 0)) {
+        let role = "user"
+        return res.status(200).json(role);
     }
-    let checkPassword = await UserHelper.findUser(email, password);
-    console.log(checkPassword);
-    if (checkPassword.length === 0) {
-        return res.status(400).json("Invalid password");
+    else {
+
+        const LawyerFind = await Lawyer.find({ email: email, password: password });
+        if (!(LawyerFind.length === 0)) {
+            let role = "lawyer";
+            return res.status(200).json(role);
+        }
+        return res.status(400).json("Email or Password is wrong")
     }
-    let role = 'user';
-    return res.status(200).json(role);
+    // if (checkEmail === null || checkEmail.length === 0) {
+    //     findLawyer = await Lawyer.find({ email: email });
+    //     if (findLawyer.length === 0) {
+    //         return res.status(400).json("Email doesnot exists");
+    //     }
+    //     else {
+    //         let checkLawyer = await Lawyer.find({ email: email, password: password });
+    //         if (checkLawyer.length === 0) {
+    //             return res.status(400).json("Password Invalid")
+    //         }
+    //         else {
+    //             let role = 'lawyer';
+    //             return res.status(200).json(role);
+    //         }
+    //     }
+    // }
+    // let checkPassword = await UserHelper.findUser(email, password);
+    // console.log(checkPassword);
+    // if (checkPassword.length === 0) {
+    //     return res.status(400).json("Invalid password");
+    // }
+    // let role = 'user';
+    // return res.status(200).json(role);
 };
 //checked
 exports.askQuestion = async (req, res) => {
