@@ -132,11 +132,11 @@ exports.login = async (req, res) => {
     let email = request.email;
     let password = request.password;
 
-    if (!email || !password) {
-        return res.status(400).json("Missing required information")
-    }
+    // if (!email || !password) {
+    //     return res.status(400).json("Missing required information")
+    // }
 
-    let checkEmail = await UserHelper.findUser(email);
+    let checkEmail = await UserHelper.findUser(email, password);
     // console.log(checkEmail);
     if (!(checkEmail.length === 0)) {
         let role = "user"
@@ -268,7 +268,7 @@ exports.viewRecentQuestions = async (req, res) => {
 exports.viewLawyers = async (req, res) => {
     let request = req.body;
     let lawyerList = [];
-    lawyerList = await User.find().limit(6).sort({ createdAt: -1 });
+    lawyerList = await Lawyer.find().limit(6).sort({ createdAt: -1 });
     return res.status(200).json(lawyerList);
 }
 
