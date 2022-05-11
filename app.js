@@ -71,7 +71,6 @@ app.use("/blawgs", blawgRoutes);
 app.use((req, res) => {
     const error = new Error("Not found");
     error.status = 404;
-    res(error);
 });
 
 app.use((error, req, res) => {
