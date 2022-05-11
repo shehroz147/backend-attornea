@@ -23,7 +23,7 @@ const options = {
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 
-const server = process.env.MODE == "DEV" ? http.createServer(app) : http.createServer(options, app);
+const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
 
 
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
