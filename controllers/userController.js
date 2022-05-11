@@ -137,17 +137,17 @@ exports.login = async (req, res) => {
     // }
 
     let checkEmail = await UserHelper.findUser(email, password);
-    // console.log(checkEmail);
-    if (!(checkEmail.length === 0)) {
-        let role = "user"
-        return res.status(200).json(role);
-    }
-    else {
-
+    console.log(checkEmail);
+    if ((checkEmail.length === 0)) {
         const LawyerFind = await Lawyer.find({ email: email, password: password });
+        console.log(LawyerFind);
         if (!(LawyerFind.length === 0)) {
             let role = "lawyer";
             return res.status(200).json(role);
+        }
+        if (checkEmail) {
+            let role = "user";
+            return res.status(200).json(role)
         }
         return res.status(400).json("Email or Password is wrong")
     }

@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const lawyerSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    firstName: { type: String },
+    lastName: { type: String },
     email: { type: String, unique: "That email is already taken", required: true },
     password: { type: String, required: true },
     token: { type: String },
