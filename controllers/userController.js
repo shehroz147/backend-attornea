@@ -333,13 +333,27 @@ exports.showAllUsers = async (req, res) => {
 
 }
 
+exports.showPosts = async (req, res) => {
+
+    // let users = await User.find().sort({ createdAt: -1 });
+    let posts = await Post.find().sort({ createdAt: -1 });
+    // Array.prototype.push.apply(users, lawyers);
+    // console.lo
+    return res.status(200).json(posts);
+
+}
+
 
 exports.addPost = async (req, res) => {
 
     let data = req.body.data;
+    const userName = req.body.userName;
+    const user = await User.find({ email: userName, isVerified: true });
+    console.log(user[0].firstName);
     const post = new Post({
         _id: new mongoose.Types.ObjectId(),
-        data: data
+        data: data,
+        userName: user[0].firstName
     });
     await post.save();
     return res.status(200).json("success");

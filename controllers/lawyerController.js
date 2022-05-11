@@ -20,14 +20,40 @@ exports.addCase = async (req, res) => {
     return res.status(200).json("Successfully added case");
 
 }
+exports.editCase = async (req, res) => {
+    let id = req.body.id;
+    console.log(req.body)
+    const findCase = await Case.find({ _id: id })
+    const update = {
+        title: req.body.title || findCase.title,
+        courtName: req.body.courtName || findCase.courtName,
+        notes: req.body.notes || findCase.notes,
+        nextHiring: req.body.nextHiring || findCase.nextHiring,
+        previousHiring: req.body.previousHiring || findCase.previousHiring,
+        category: req.body.category || findCase.category,
+        stage: req.body.stage || findCase.stage,
+        // praticeArea: req.body.praticeArea || findLawyer.praticeArea
+    }
+    await Case.updateOne({ _id: id }, { $set: update })
+        .exec()
+        .then(docs => {
+            result = docs;
+        })
+        .catch(err => {
+            return err;
+        });
+    return res.status(200).json("Case Info Updated")
+}
 
 exports.addComment = async (req, res) => {
     let request = req.body;
     console.log(request);
     let questionId = request._id;
+    const userEmail = req.body.userEmail;
+    const user = await Lawyer.find({ email: userEmail });
     // let findQuestion = await Question.find({ _id: questionId });
     const comment = {
-        user: request.userId,
+        user: user.firstName,
         details: request.description
     };
     let addComment = await Question.updateOne({ _id: questionId }, { $set: { comments: comment } }).exec();

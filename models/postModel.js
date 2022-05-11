@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const postSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     data: { type: String },
+    userName: { type: String },
     isDeleted: { type: Boolean, default: "false" },
     deletedAt: { type: Date, default: null }
 }, { timestamps: true });
