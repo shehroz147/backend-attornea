@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // Models
 const User = require("../models/userModel");
-
+const Product = require("../models/product");
 
 
 exports.findUser = async (email, password) => {

@@ -49,15 +49,16 @@ exports.addComment = async (req, res) => {
     let request = req.body;
     console.log(request);
     let questionId = request._id;
-    const userEmail = req.body.userName;
-    const user = await User.find({ email: userEmail, role: "Layer" });
-    // let findQuestion = await Question.find({ _id: questionId });
-    const comment = {
+    const userEmail = req.body.userId;
+    const user_ = await User.find({ email: userEmail, role: "Lawyer" });
+    let findQuestion = await Question.find({ _id: questionId });
+    const comments = {
 
-        user: user.firstName,
-        details: request.Description
+        user: userEmail,
+        details: request.description
     };
-    let addComment = await Question.updateOne({ _id: questionId }, { $push: { comments: comment } }).exec();
+    console.log(comments)
+    let addComment = await Question.updateOne({ findQuestion }, { $set: { comments: comments } }).exec();
     return res.status(200).json("successfull");
     // return User.updateOne(user, { $push: { friends: { friend } } });
     // let user = await UserHelper.findUserByUserName(request.userName);

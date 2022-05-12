@@ -43,7 +43,7 @@ const upload = multer({
 });
 
 
-router.post("/update", jwtAuth, upload.single('userImage'), ImageController.update);
+router.post("/update", upload.single('productImage'), ImageController.update);
 router.get("/remove", jwtAuth, ImageController.remove);
 
 module.exports = router;
