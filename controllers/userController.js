@@ -18,6 +18,7 @@ exports.registerUser = async (req, res) => {
     let password = request.password;
     let firstName = request.firstName;
     let lastName = request.lastName;
+    let country = request.country;
 
     let credentialsCheck = await this.checkCredentials(firstName, lastName, email.toLowerCase(), password);
     if (!credentialsCheck) {
@@ -34,7 +35,9 @@ exports.registerUser = async (req, res) => {
         email: email.toLowerCase(),
         password: password,
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        country: request.country,
+        role: request.role
     });
     await user.save();
     const data = await this.tokenCreater(email);
@@ -71,7 +74,7 @@ exports.getLawyerData = async (req, res) => {
     let request = req.body;
     console.log(request);
     let email = request.email;
-    const findLawyer = await Lawyer.find({ email: email });
+    const findLawyer = await User.find({ email: email, role: "Lawyer" });
     return res.status(200).json(findLawyer);
 
 }
@@ -127,53 +130,15 @@ exports.verifyEmail = async (req, res) => {
 exports.login = async (req, res) => {
 
     let request = req.body;
-    // console.log(request);
-    // console.log(request);
     let email = request.email;
     let password = request.password;
-
-    // if (!email || !password) {
-    //     return res.status(400).json("Missing required information")
-    // }
-
     let checkEmail = await UserHelper.findUser(email, password);
-    console.log(checkEmail);
+    // console.log(checkEmail);
     if ((checkEmail.length === 0)) {
-        const LawyerFind = await Lawyer.find({ email: email, password: password });
-        console.log(LawyerFind);
-        if (!(LawyerFind.length === 0)) {
-            let role = "lawyer";
-            return res.status(200).json(role);
-        }
-        if (checkEmail) {
-            let role = "user";
-            return res.status(200).json(role)
-        }
-        return res.status(400).json("Email or Password is wrong")
+        return res.status(400).json("Failed");
     }
-    // if (checkEmail === null || checkEmail.length === 0) {
-    //     findLawyer = await Lawyer.find({ email: email });
-    //     if (findLawyer.length === 0) {
-    //         return res.status(400).json("Email doesnot exists");
-    //     }
-    //     else {
-    //         let checkLawyer = await Lawyer.find({ email: email, password: password });
-    //         if (checkLawyer.length === 0) {
-    //             return res.status(400).json("Password Invalid")
-    //         }
-    //         else {
-    //             let role = 'lawyer';
-    //             return res.status(200).json(role);
-    //         }
-    //     }
-    // }
-    // let checkPassword = await UserHelper.findUser(email, password);
-    // console.log(checkPassword);
-    // if (checkPassword.length === 0) {
-    //     return res.status(400).json("Invalid password");
-    // }
-    // let role = 'user';
-    // return res.status(200).json(role);
+    console.log(checkEmail);
+    return res.status(200).json(checkEmail);
 };
 //checked
 exports.askQuestion = async (req, res) => {
@@ -268,7 +233,7 @@ exports.viewRecentQuestions = async (req, res) => {
 exports.viewLawyers = async (req, res) => {
     let request = req.body;
     let lawyerList = [];
-    lawyerList = await Lawyer.find().limit(6).sort({ createdAt: -1 });
+    lawyerList = await User.find({ role: "Lawyer" }).limit(6).sort({ createdAt: -1 });
     return res.status(200).json(lawyerList);
 }
 
@@ -277,7 +242,7 @@ exports.getUserData = async (req, res) => {
     console.log(req.body.email);
     let email = request.email;
     // console.log(request);
-    let findUser = await User.find({ email: email });
+    let findUser = await User.find({ email: email, role: "User" });
     // console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
@@ -292,13 +257,22 @@ exports.viewqueries = async (req, res) => {
     const question = await Question.find({ isDeleted: false }).limit(6).sort({ createdAt: -1 });
     console.log(question);
     return res.status(200).json(question);
+}
+
+
+exports.showAllQuestion = async (req, res) => {
+
+    const question = await Question.find({ isDeleted: false }).sort({ createdAt: -1 });
+    console.log(question);
+    return res.status(200).json(question);
 
 }
+
 
 exports.updateUser = async (req, res) => {
     let request = req.body;
     let email = req.body.email;
-    const findUser = await User.find({ email: email });
+    const findUser = await User.find({ email: email, role: "User" });
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
@@ -327,8 +301,8 @@ exports.showMyQuestions = async (req, res) => {
 exports.showAllUsers = async (req, res) => {
 
     let users = await User.find().sort({ createdAt: -1 });
-    let lawyers = await Lawyer.find().sort({ createdAt: -1 });
-    Array.prototype.push.apply(users, lawyers);
+    // let lawyers = await Lawyer.find().sort({ createdAt: -1 });
+    // Array.prototype.push.apply(users, lawyers);
     return res.status(200).json(users);
 
 }
@@ -339,6 +313,7 @@ exports.showPosts = async (req, res) => {
     let posts = await Post.find().sort({ createdAt: -1 });
     // Array.prototype.push.apply(users, lawyers);
     // console.lo
+    console.log(posts);
     return res.status(200).json(posts);
 
 }

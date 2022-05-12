@@ -6,11 +6,11 @@ const Case = require('../models/caseModel');
 
 
 exports.findLawyer = async (email) => {
-    return await Lawyer.find({ email: email });
+    return await User.find({ email: email, role: "Lawyer" });
 }
 
 exports.findLawyerPass = async (email, pass) => {
-    return await Lawyer.find({ email: email, password: pass });
+    return await User.find({ email: email, password: pass, role: "Lawyer" });
 }
 
 

@@ -50,7 +50,7 @@ exports.addComment = async (req, res) => {
     console.log(request);
     let questionId = request._id;
     const userEmail = req.body.userEmail;
-    const user = await Lawyer.find({ email: userEmail });
+    const user = await User.find({ email: userEmail, role: "Layer" });
     // let findQuestion = await Question.find({ _id: questionId });
     const comment = {
         user: user.firstName,
@@ -81,7 +81,7 @@ exports.getLawyerData = async (req, res) => {
     console.log(req.body.email);
     let email = request.email;
     // console.log(request);
-    let findUser = await Lawyer.find({ email: email });
+    let findUser = await User.find({ email: email, role: "Lawyer" });
     // console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
@@ -194,7 +194,7 @@ exports.citationSearch = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find({ lawyerId: lawyerId })
+    const findLawyer = await User.find({ lawyerId: lawyerId })
     if (!findLawyer) {
         return res.status(400).json("No User Found")
     }
@@ -235,7 +235,7 @@ exports.viewAllProducts = async (req, res) => {
 
 exports.editProduct = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find({ _id: lawyerId })
+    const findLawyer = await User.find({ _id: lawyerId, role: "Lawyer" })
     if (!findLawyer) {
         return res.status(400).json("User doesnot exists")
     }
@@ -252,7 +252,7 @@ exports.editProduct = async (req, res) => {
 //Not Checked//
 exports.deleteProduct = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find();
+    const findLawyer = await User.find({ role: "Lawyer" });
     if (!findLawyer) {
         return res.status(404).json("Lawyer Doesnot Exists")
     }
@@ -267,7 +267,7 @@ exports.deleteProduct = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     let result;
     // let lawyerId = req.body._id
-    const findLawyer = await Lawyer.find({ email: req.body.email })
+    const findLawyer = await User.find({ email: req.body.email, role: "Lawyer" })
     if (findLawyer.length === 0) {
         return res.status(400).json("Lawyer Doesnot exists")
     }
@@ -297,7 +297,7 @@ exports.updateProfile = async (req, res) => {
 
 exports.removeLawyer = async (req, res) => {
     let lawyerId = req.body.lawyerId
-    const findLawyer = await Lawyer.find({ _id: req.body._id })
+    const findLawyer = await User.find({ _id: req.body._id, role: "Lawyer" })
     if (!findLawyer) {
         return res.status(404).json("No Lawyer Found")
     }

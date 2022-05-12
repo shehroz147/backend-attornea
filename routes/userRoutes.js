@@ -24,5 +24,5 @@ router.post("/getLawyerInfo", UserController.getLawyerData);
 router.post("/deleteQuestion", UserController.deleteQuestion);
 router.post("/getCitation", UserController.getCitation);
 router.post("/showPosts", UserController.showPosts);
-
+router.post("/showAllQuestions", UserController.showAllQuestion);
 module.exports = router;

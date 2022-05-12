@@ -23,7 +23,8 @@ const options = {
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 
-const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
+// const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
+const server = http.createServer(app);
 
 
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
@@ -68,12 +69,13 @@ app.use("/user", userRoutes);
 app.use("/lawyer", lawyerRoutes)
 app.use("/products", productRoutes);
 app.use("/blawgs", blawgRoutes);
-app.use((req, res) => {
+app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;
+    next(error);
 });
 
-app.use((error, req, res) => {
+app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
         error: {
