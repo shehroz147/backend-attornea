@@ -7,7 +7,7 @@ const GeneralHelper = require("../helpers/generalHelper");
 exports.update = async (req, res, next) => {
 
     // let response = ResponseHelper.getDefaultResponse();
-    let userId = req.user.userId;
+    let userId = req.body.userId;
 
     let foundUser = await UserHelper.foundUserById(userId);
     if (foundUser == null) {

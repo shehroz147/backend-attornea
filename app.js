@@ -26,7 +26,7 @@ const options = {
 };
 
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
-const server = http.createServer(app);
+const server = https.createServer(app);
 
 
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
