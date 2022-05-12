@@ -13,6 +13,15 @@ exports.findUser = async (email, password) => {
         password: password
     });
 }
+exports.foundUserById = async (_id) => {
+    return await User.findOne({ _id: _id });
+}
+
+
+exports.updateUser = async (findObj, setObj) => {
+    return await User.updateOne(findObj, { $set: setObj });
+}
+
 
 exports.findUserPass = async (email, pass) => {
     return await User.find({ email: email, password: pass });

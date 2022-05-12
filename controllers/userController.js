@@ -51,6 +51,13 @@ exports.registerUser = async (req, res) => {
     return res.status(200).json("Successful");
 };
 
+exports.showPostComment = async (req, res) => {
+    let postId = req.body.postId;
+    // console.log(req.body);
+    let comments = await Post.find({ _id: postId }, { comments: 1 });
+    console.log(comments);
+    return res.status(200).json(comments);
+}
 
 exports.getCitation = async (req, res) => {
     const getCitation = await Citation.find();
@@ -242,7 +249,7 @@ exports.getUserData = async (req, res) => {
     console.log(req.body.email);
     let email = request.email;
     // console.log(request);
-    let findUser = await User.find({ email: email, role: "User" });
+    let findUser = await User.find({ email: email, role: "Lawyer" });
     // console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
@@ -336,4 +343,27 @@ exports.addPost = async (req, res) => {
     // console.log(question);
     // return res.status(200).json(question);
 
+}
+
+
+exports.commentOnPost = async (req, res) => {
+    // console.log(req.body);
+    let postId = req.body.postId;
+    let userId = req.body.userId;
+    let desc = req.body.desc;
+    let user = await User.findOne({ email: userId }, { comments: 0, _id: 0 });
+    // console.log(user);
+    // user.toString();
+    let post = await Post.findOne({ _id: postId });
+    // console.log(post);
+    let addComment = await Post.updateOne(post, { $push: { comments: user } });
+    let addDesc = await Post.findOne({ _id: post._id }, { comments: { $elemMatch: { email: user.email } } });
+
+    console.log(addDesc);
+    let done = await Post.updateOne(addDesc, { $push: { comments: { desc: desc } } });
+    // $push: { participants: { teamName } }
+    return res.status(200).json("Comment added")
+    // exports.addFriend = async (user, friend, res) => {
+    //     return User.updateOne(user, { $push: { friends: { friend } } });
+    // }
 }

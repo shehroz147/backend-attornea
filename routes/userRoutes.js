@@ -25,4 +25,6 @@ router.post("/deleteQuestion", UserController.deleteQuestion);
 router.post("/getCitation", UserController.getCitation);
 router.post("/showPosts", UserController.showPosts);
 router.post("/showAllQuestions", UserController.showAllQuestion);
+router.post("/commentOnPost", UserController.commentOnPost);
+router.post("/showComments", UserController.showPostComment);
 module.exports = router;
