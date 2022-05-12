@@ -88,5 +88,5 @@ app.use((error, req, res, next) => {
 });
 
 
-server.listen(port);
+app.listen(process.env.PORT || 4000);
 module.exports = app;
