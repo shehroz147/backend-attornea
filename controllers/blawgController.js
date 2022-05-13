@@ -6,11 +6,13 @@ exports.addBlawgs = async (req, res) => {
     let title = request.title;
     let category = request.category;
     let description = request.description;
+    let imageUrl = request.imageUrl;
     const blawg = new Blawgs({
         _id: new mongoose.Types.ObjectId(),
         title: title,
         category: category,
-        description: description
+        description: description,
+        imageUrl: imageUrl
     })
     await blawg.save();
     return res.status(200).json("successfull");

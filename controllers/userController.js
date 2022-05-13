@@ -249,8 +249,24 @@ exports.getUserData = async (req, res) => {
     console.log(req.body.email);
     let email = request.email;
     // console.log(request);
-    let findUser = await User.find({ email: email, role: "Lawyer" });
+    let findUser = await User.find({ email: email, role: "User" });
     // console.log(findUser[0])
+    if (findUser === null) {
+        return res.status(400).json("User with thhis email doesnot exist")
+    }
+    else {
+        return res.status(200).json(findUser[0]);
+    }
+}
+
+
+exports.getLawyerData = async (req, res) => {
+    let request = req.body;
+    console.log(req.body.email);
+    let email = request.email;
+    // console.log(request);
+    let findUser = await User.find({ email: email, role: "Lawyer" });
+    console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
     }
@@ -283,7 +299,36 @@ exports.updateUser = async (req, res) => {
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
-        bio: req.body.bio || findUser.bio
+        bio: req.body.bio || findUser.description,
+        profileImage: req.body.imageUrl || findUser.profileImage
+    }
+    await User.updateOne({ email: request.email }, { $set: updateInfo })
+        .exec()
+        .then(docs => {
+            result = docs;
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+    return res.status(200).json("successfull");
+}
+
+
+exports.updateLawyer = async (req, res) => {
+    let request = req.body;
+    let email = req.body.email;
+    const findUser = await User.find({ email: email, role: "Lawyer" });
+    const updateInfo = {
+        firstName: req.body.name || findUser.firstName,
+        gender: req.body.gender || findUser.gender,
+        bio: req.body.bio || findUser.description,
+        profileImage: req.body.imageUrl || findUser.profileImage,
+        licenseNo: req.body.License || findUser.licenseNo,
+        education: req.body.education || findUser.education,
+        workExperience: req.body.workExperience || findUser.workExperience,
+        practiceArea: req.body.practiceArea || findUser.practiceArea
     }
     await User.updateOne({ email: request.email }, { $set: updateInfo })
         .exec()

@@ -5,6 +5,7 @@ const blawgSchema = new mongoose.Schema({
     title: { type: String },
     category: { type: String },
     description: { type: String },
+    imageUrl: { type: String }
 
 }, { timestamps: true });
 
