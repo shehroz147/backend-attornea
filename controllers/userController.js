@@ -77,14 +77,14 @@ exports.deleteQuestion = async (req, res) => {
 }
 
 
-exports.getLawyerData = async (req, res) => {
-    let request = req.body;
-    console.log(request);
-    let email = request.email;
-    const findLawyer = await User.find({ email: email, role: "Lawyer" });
-    return res.status(200).json(findLawyer);
+// exports.getLawyerData = async (req, res) => {
+//     let request = req.body;
+//     console.log(request);
+//     let email = request.email;
+//     const findLawyer = await User.find({ email: email, role: "Lawyer" });
+//     return res.status(200).json(findLawyer);
 
-}
+// }
 
 exports.checkCredentials = async (firstName, lastName, email, password) => {
     if (!firstName || !lastName || !email || !password) {
@@ -328,7 +328,7 @@ exports.updateLawyer = async (req, res) => {
         licenseNo: req.body.License || findUser.licenseNo,
         education: req.body.education || findUser.education,
         workExperience: req.body.workExperience || findUser.workExperience,
-        practiceArea: req.body.practiceArea || findUser.practiceArea
+        practiceArea: req.body.practiceArea || findLawyer.practiceArea
     }
     await User.updateOne({ email: request.email }, { $set: updateInfo })
         .exec()
