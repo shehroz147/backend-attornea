@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const postSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     data: { type: String },
+    image: { type: String },
     userName: { type: String },
     comments: [
         new mongoose.Schema({

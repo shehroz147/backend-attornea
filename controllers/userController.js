@@ -375,11 +375,13 @@ exports.addPost = async (req, res) => {
 
     let data = req.body.data;
     const userName = req.body.userName;
+    const image = req.body.image;
     const user = await User.find({ email: userName, isVerified: true });
     console.log(user[0].firstName);
     const post = new Post({
         _id: new mongoose.Types.ObjectId(),
         data: data,
+        image: image,
         userName: user[0].firstName
     });
     await post.save();
