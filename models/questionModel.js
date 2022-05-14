@@ -7,10 +7,11 @@ const questionSchema = mongoose.Schema({
     province: { type: String },
     city: { type: String },
     areaOfLaw: { type: String },
-    comments: {
-        user: { type: String, default: null },
-        details: { type: String, default: null },
-    },
+    comments: [
+        new mongoose.Schema({
+            user: { type: String },
+        }, { strict: false })
+    ],
     title: { type: String },
     description: { type: String },
     isDeleted: { type: Boolean, default: "false" },

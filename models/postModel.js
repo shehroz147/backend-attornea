@@ -9,7 +9,6 @@ const postSchema = mongoose.Schema({
     comments: [
         new mongoose.Schema({
             user: { type: String },
-            desc: { type: String },
         }, { strict: false })
     ],
     isDeleted: { type: Boolean, default: "false" },

@@ -392,23 +392,35 @@ exports.addPost = async (req, res) => {
 
 }
 
+exports.addComment = async (req, res) => {
+    let request = req.body;
+    console.log(request);
+    let questionId = request._id;
+    const userEmail = req.body.userId;
+    const user_ = await User.find({ email: userEmail, role: "Lawyer" });
+    let findQuestion = await Question.find({ _id: questionId });
+    const comments = {
+        user: userEmail,
+        comment: request.description
+    };
+    console.log(comments)
+    let addComment = await Question.updateOne(findQuestion, { $push: { comments: comments } });
+    return res.status(200).json("successfull");
+}
 
 exports.commentOnPost = async (req, res) => {
     // console.log(req.body);
     let postId = req.body.postId;
     let userId = req.body.userId;
-    let desc = req.body.desc;
-    let user = await User.findOne({ email: userId }, { comments: 0, _id: 0 });
-    // console.log(user);
-    // user.toString();
+    let comment = req.body.desc;
+    let user = await User.findOne({ email: userId });
     let post = await Post.findOne({ _id: postId });
+    const comments = {
+        user: user.email,
+        comment: comment
+    }
     // console.log(post);
-    let addComment = await Post.updateOne(post, { $push: { comments: user } });
-    let addDesc = await Post.findOne({ _id: post._id }, { comments: { $elemMatch: { email: user.email } } });
-
-    console.log(addDesc);
-    let done = await Post.updateOne(addDesc, { $push: { comments: { desc: desc } } });
-    // $push: { participants: { teamName } }
+    let addComment = await Post.updateOne(post, { $push: { comments: comments } });
     return res.status(200).json("Comment added")
     // exports.addFriend = async (user, friend, res) => {
     //     return User.updateOne(user, { $push: { friends: { friend } } });

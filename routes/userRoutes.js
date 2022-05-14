@@ -29,4 +29,5 @@ router.post("/showPosts", UserController.showPosts);
 router.post("/showAllQuestions", UserController.showAllQuestion);
 router.post("/commentOnPost", UserController.commentOnPost);
 router.post("/showComments", UserController.showPostComment);
+router.post("/addComment", UserController.addComment);
 module.exports = router;
