@@ -394,17 +394,17 @@ exports.addPost = async (req, res) => {
 
 exports.addComment = async (req, res) => {
     let request = req.body;
-    console.log(request);
-    let questionId = request._id;
-    const userEmail = req.body.userId;
+    // console.log(request);
+    let questionId = request.questionId;
+    const userEmail = req.body.userName;
     const user_ = await User.find({ email: userEmail, role: "Lawyer" });
-    let findQuestion = await Question.find({ _id: questionId });
+    let findQuestion = await Question.findOne({ _id: questionId });
     const comments = {
         user: userEmail,
-        comment: request.description
+        comment: request.Description
     };
     console.log(comments)
-    let addComment = await Question.updateOne(findQuestion, { $push: { comments: comments } });
+    let addComment = await Question.updateOne({ findQuestion }, { $push: { comments: comments } });
     return res.status(200).json("successfull");
 }
 
