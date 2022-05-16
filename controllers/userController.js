@@ -142,8 +142,8 @@ exports.login = async (req, res) => {
     let email = request.email;
     let password = request.password;
     let checkEmail = await UserHelper.findUser(email, password);
-    // console.log(checkEmail);
-    if ((checkEmail.length === 0)) {
+    console.log(checkEmail);
+    if (checkEmail.length === 0) {
         return res.status(400).json("Failed");
     }
     console.log(checkEmail);
@@ -357,10 +357,14 @@ exports.showMyQuestions = async (req, res) => {
 exports.showResponded = async (req, res) => {
 
     let email = req.body.email;
+    const findUser = await UserHelper.findUserIdByEmail(email);
+
     console.log(email);
     const question = await Question.find({
         comments: {
-            $elemMatch: { user: email }
+            $elemMatch: {
+                user: findUser._id
+            }
         }
     });
     console.log(question)
