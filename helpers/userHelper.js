@@ -26,3 +26,7 @@ exports.updateUser = async (findObj, setObj) => {
 exports.findUserPass = async (email, pass) => {
     return await User.find({ email: email, password: pass });
 }
+
+exports.findUserIdByEmail = async (email) => {
+    return await User.findOne({ email: email })
+}

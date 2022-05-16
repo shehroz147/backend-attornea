@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const citationSchema = new mongoose.Schema({
+const citationSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: { type: String },
     clcName: { type: String },

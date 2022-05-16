@@ -7,7 +7,7 @@ const postSchema = mongoose.Schema({
     image: { type: String },
     userName: { type: String },
     comments: [
-        new mongoose.Schema({
+        mongoose.Schema({
             user: { type: String },
         }, { strict: false })
     ],

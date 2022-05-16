@@ -18,6 +18,7 @@ router.get("/verify/:id/:token", LawyerController.verifyEmail);
 // router.post("/hire", UserController.hire)
 // router.post('/talk', UserController.talk)]
 router.post('/getCases', LawyerController.getCases)
+router.post('/getCasesForToday', LawyerController.getCasesForToday)
 router.post('/addProduct', LawyerController.addProduct)
 router.post('/getuserbyID', LawyerController.getUserbyId)
 router.post('/viewAllProducts', LawyerController.viewAllProducts)

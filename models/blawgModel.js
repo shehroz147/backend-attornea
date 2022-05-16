@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const blawgSchema = new mongoose.Schema({
+const blawgSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: { type: String },
     category: { type: String },

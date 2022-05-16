@@ -11,6 +11,8 @@ const Lawyer = require('../models/lawyerModel');
 const Post = require("../models/postModel");
 const { findLawyer } = require("../helpers/lawyerHelper");
 const Citation = require("../models/citationModel");
+const Diary = require("../models/diaryModel");
+
 exports.registerUser = async (req, res) => {
     let request = req.body;
     console.log(request);
@@ -156,7 +158,7 @@ exports.askQuestion = async (req, res) => {
     let areaOfLaw = req.body.areaOfLaw
     let description = req.body.description
     let email = req.body.email;
-    // const findUser = await User.find({ email: email });
+    const findUser = await User.findOne({ email: email });
     const ques = new Question({
         _id: new mongoose.Types.ObjectId(),
         city: city,
@@ -164,7 +166,7 @@ exports.askQuestion = async (req, res) => {
         province: province,
         areaOfLaw: areaOfLaw,
         description: description,
-        userEmail: email
+        user: findUser._id
     })
     await ques.save();
     // await Question.find({ _id: ques._id }).populate("userId");
@@ -277,7 +279,7 @@ exports.getLawyerData = async (req, res) => {
 
 exports.viewqueries = async (req, res) => {
 
-    const question = await Question.find({ isDeleted: false }).limit(6).sort({ createdAt: -1 });
+    const question = await Question.find({ isDeleted: false }).limit(6).sort({ createdAt: -1 }).populate("user");
     console.log(question);
     return res.status(200).json(question);
 }
@@ -285,7 +287,7 @@ exports.viewqueries = async (req, res) => {
 
 exports.showAllQuestion = async (req, res) => {
 
-    const question = await Question.find({ isDeleted: false }).sort({ createdAt: -1 });
+    const question = await Question.find({ isDeleted: false }).sort({ createdAt: -1 }).populate("user");
     console.log(question);
     return res.status(200).json(question);
 
@@ -319,6 +321,7 @@ exports.updateUser = async (req, res) => {
 exports.updateLawyer = async (req, res) => {
     let request = req.body;
     let email = req.body.email;
+    console.log(request);
     const findUser = await User.find({ email: email, role: "Lawyer" });
     const updateInfo = {
         firstName: req.body.name || findUser.firstName,
@@ -328,7 +331,8 @@ exports.updateLawyer = async (req, res) => {
         licenseNo: req.body.License || findUser.licenseNo,
         education: req.body.education || findUser.education,
         workExperience: req.body.workExperience || findUser.workExperience,
-        practiceArea: req.body.practiceArea || findLawyer.practiceArea
+        practiceArea: req.body.practiceArea || findLawyer.practiceArea,
+        consultationFee: req.body.fee || findLawyer.consultationFee
     }
     await User.updateOne({ email: request.email }, { $set: updateInfo })
         .exec()
@@ -345,7 +349,21 @@ exports.updateLawyer = async (req, res) => {
 
 exports.showMyQuestions = async (req, res) => {
 
-    const question = await Question.find({ userEmail: req.body.email, isDeleted: false }).sort({ createdAt: -1 });
+    const question = await Question.find({ userEmail: req.body.email, isDeleted: false }).sort({ createdAt: -1 }).populate("user");
+    return res.status(200).json(question);
+
+}
+
+exports.showResponded = async (req, res) => {
+
+    let email = req.body.email;
+    console.log(email);
+    const question = await Question.find({
+        comments: {
+            $elemMatch: { user: email }
+        }
+    });
+    console.log(question)
     return res.status(200).json(question);
 
 }
@@ -397,10 +415,11 @@ exports.addComment = async (req, res) => {
     // console.log(request);
     let questionId = request.questionId;
     const userEmail = req.body.userName;
-    const user_ = await User.find({ email: userEmail, role: "Lawyer" });
+    const user_ = await User.findOne({ email: userEmail, role: "Lawyer" });
+    console.log("The user profile is :", user_);
     let findQuestion = await Question.findOne({ _id: questionId });
     const comments = {
-        user: userEmail,
+        user: user_._id,
         comment: request.Description
     };
     console.log(comments)

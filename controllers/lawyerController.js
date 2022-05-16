@@ -16,7 +16,10 @@ const Citation = require("../models/citationModel");
 
 exports.addCase = async (req, res) => {
     let request = req.body;
-    const addingCase = await LawyerHelper.addCase(request);
+    let userEmail = req.body.userEmail;
+    const user = await User.findOne({ email: userEmail });
+    console.log(user._id);
+    const addingCase = await LawyerHelper.addCase(request, user._id);
     return res.status(200).json("Successfully added case");
 
 }
@@ -324,10 +327,26 @@ exports.removeLawyer = async (req, res) => {
 
 
 exports.getCases = async (req, res) => {
-    const cases = await Case.find();
+    const user = req.body.userEmail;
+    console.log(user);
+    const findLawyer = await UserHelper.findUserIdByEmail(user);
+    console.log(findLawyer)
+    const cases = await Case.find({ user: findLawyer }).populate("user");
+    console.log(cases);
     return res.status(200).json(cases);
 }
 
+
+exports.getCasesForToday = async (req, res) => {
+    const user = req.body.userEmail;
+    console.log(user);
+    const findLawyer = await UserHelper.findUserIdByEmail(user);
+    console.log(findLawyer)
+    // console.log(Date("YYYY-MM-DD"));
+    const cases = await Case.find({ user: findLawyer, nextHiring: new Date() }).populate("user");
+    console.log(cases);
+    return res.status(200).json(cases);
+}
 
 exports.registerLawyer = async (req, res) => {
     let request = req.body;

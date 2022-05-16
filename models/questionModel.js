@@ -3,15 +3,14 @@ const mongoose = require("mongoose");
 
 const questionSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    userEmail: { type: String },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     province: { type: String },
     city: { type: String },
     areaOfLaw: { type: String },
-    comments: [
-        new mongoose.Schema({
-            user: { type: String },
-        }, { strict: false })
-    ],
+    comments: {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        comment: { type: String }
+    },
     title: { type: String },
     description: { type: String },
     isDeleted: { type: Boolean, default: "false" },

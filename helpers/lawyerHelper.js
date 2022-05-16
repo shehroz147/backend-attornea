@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // Models
 const Lawyer = require("../models/lawyerModel");
 const Case = require('../models/caseModel');
+const req = require("express/lib/request");
 
 
 exports.findLawyer = async (email) => {
@@ -14,15 +15,14 @@ exports.findLawyerPass = async (email, pass) => {
 }
 
 
-exports.addCase = async (request) => {
-    console.log(request);
+exports.addCase = async (request, user) => {
+    console.log(request.nextHiring);
+    // const userEmail = request.userEmail;
     const myCase = new Case({
         _id: new mongoose.Types.ObjectId(),
+        user: user,
         title: request.title,
-        // caseClient: request.caseClient,
-        // name: request.name,
         category: request.category,
-        // caseNumber: request.caseNumber,
         stage: request.stage,
         nextHiring: request.nextHiring,
         previousHiring: request.previousHiring,
@@ -30,5 +30,6 @@ exports.addCase = async (request) => {
         courtName: request.courtName,
     })
     return await myCase.save();
+
 
 }

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     email: { type: String, unique: "That email is already taken", required: true },
     password: { type: String, required: true },
@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     praticeArea: { type: String },
     lisenceNo: { type: Number },
     firstName: { type: String, required: true },
+    consultationFee: { type: String },
     lastName: { type: String, required: true },
     role: { type: String, enum: ["User", "Lawyer"], required: true, default: "User" },
     status: { type: String, enum: ["Inactive", "Active"], default: "Inactive" },
