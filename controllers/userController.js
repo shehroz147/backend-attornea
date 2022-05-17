@@ -321,10 +321,11 @@ exports.updateUser = async (req, res) => {
 exports.updateLawyer = async (req, res) => {
     let request = req.body;
     let email = req.body.email;
-    console.log(request.experienceArray);
+    // console.log(request.experienceArray);
+    console.log("Practice Area", req.body.practiceArea);
     const findUser = await User.find({ email: email, role: "Lawyer" });
     const updateInfo = {
-        firstName: req.body.name || findUser.firstName,
+        firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
         bio: req.body.bio || findUser.description,
         profileImage: req.body.imageUrl || findUser.profileImage,

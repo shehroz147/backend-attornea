@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
     gender: { type: String },
     country: { type: String },
     bio: { type: String },
-    praticeArea: { type: String },
+    praticeArea: { type: Array },
     lisenceNo: { type: Number },
     firstName: { type: String, required: true },
     consultationFee: { type: String },
