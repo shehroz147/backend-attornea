@@ -297,13 +297,13 @@ exports.showAllQuestion = async (req, res) => {
 exports.updateUser = async (req, res) => {
     let request = req.body;
     let email = req.body.email;
-    const findUser = await User.find({ email: email, role: "User" });
+    const findUser = await User.find({ email: email });
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
         bio: req.body.bio || findUser.description,
         profileImage: req.body.imageUrl || findUser.profileImage
-    }
+    };
     await User.updateOne({ email: request.email }, { $set: updateInfo })
         .exec()
         .then(docs => {
