@@ -48,6 +48,14 @@ exports.editCase = async (req, res) => {
     return res.status(200).json("Case Info Updated")
 }
 
+
+exports.deleteCase = async (req, res) => {
+    let id = req.body.id;
+    console.log(req.body)
+    // const findCase = await Case.find({ _id: id })
+    await Case.deleteOne({ _id: id });
+    return res.status(200).json("Case Info Updated")
+}
 exports.addComment = async (req, res) => {
     let request = req.body;
     console.log(request);

@@ -29,7 +29,7 @@ exports.registerUser = async (req, res) => {
 
     let checkEmail = await UserHelper.findUser(email.toLowerCase());
     // console.log(checkEmail);
-    if (!(checkEmail.length === 0)) {
+    if (!(checkEmail === null)) {
         return res.status(400).json("Email already exists");
     }
     const user = new User({
@@ -142,8 +142,8 @@ exports.login = async (req, res) => {
     let email = request.email;
     let password = request.password;
     const checkEmail = await User.findOne({ email: req.body.email, password: password });
-    if (checkEmail === 'null') {
-        return res.status(400).json("Failed");
+    if (checkEmail === null) {
+        return res.status(401).json("Invalid");
     }
     return res.status(200).json(checkEmail);
 };
@@ -234,7 +234,7 @@ exports.viewRecentQuestions = async (req, res) => {
     let request = req.body;
     let queries = [];
     queries = await Question.find()
-    return res.status(200).json(queries);
+    return res.status(200).json(queries).populate("user");
 }
 
 exports.viewLawyers = async (req, res) => {
@@ -322,20 +322,21 @@ exports.updateUser = async (req, res) => {
 
 exports.updateLawyer = async (req, res) => {
     let request = req.body;
+    console.log(request);
     const findUser = await User.findOne({ _id: req.body.id });
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
         bio: req.body.bio || findUser.description,
-        email: req.body.email || findUser.email,
+        // email: req.body.email || findUser.email,
         profileImage: req.body.imageUrl || findUser.profileImage,
         licenseNo: req.body.License || findUser.licenseNo,
         education: req.body.education || findUser.education,
         workExperience: req.body.workExperience || findUser.workExperience,
-        practiceArea: req.body.practiceArea || findLawyer.practiceArea,
-        consultationFee: req.body.fee || findLawyer.consultationFee
+        practiceArea: req.body.practiceArea || findUser.practiceArea,
+        consultationFee: req.body.fee || findUser.consultationFee
     }
-    await User.updateOne({ findUser }, { $set: updateInfo })
+    await User.updateOne({ _id: req.body.id }, { $set: updateInfo })
         .exec()
         .then(docs => {
             result = docs;
