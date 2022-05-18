@@ -16,10 +16,10 @@ const Citation = require("../models/citationModel");
 
 exports.addCase = async (req, res) => {
     let request = req.body;
-    let userEmail = req.body.userEmail;
-    const user = await User.findOne({ email: userEmail });
-    console.log(user._id);
-    const addingCase = await LawyerHelper.addCase(request, user._id);
+    let userId = req.body.id;
+    const user = await User.findOne({ _id: userId });
+    // console.log(user._id);
+    const addingCase = await LawyerHelper.addCase(request, user);
     return res.status(200).json("Successfully added case");
 
 }
@@ -83,16 +83,13 @@ exports.addComment = async (req, res) => {
 
 exports.getLawyerData = async (req, res) => {
     let request = req.body;
-    console.log(req.body.email);
-    let email = request.email;
-    // console.log(request);
-    let findUser = await User.find({ email: email, role: "Lawyer" });
-    // console.log(findUser[0])
-    if (findUser === null) {
+    let id = request.id;
+    let findUser = await User.findOne({ _id: id });
+    if (findUser.length === 0) {
         return res.status(400).json("User with thhis email doesnot exist")
     }
     else {
-        return res.status(200).json(findUser[0]);
+        return res.status(200).json(findUser);
     }
 }
 exports.citationSearch = async (req, res) => {
@@ -327,11 +324,11 @@ exports.removeLawyer = async (req, res) => {
 
 
 exports.getCases = async (req, res) => {
-    const user = req.body.userEmail;
-    console.log(user);
-    const findLawyer = await UserHelper.findUserIdByEmail(user);
-    console.log(findLawyer)
-    const cases = await Case.find({ user: findLawyer }).populate("user");
+    const user = req.body.id;
+    // console.log(user);
+    const findLawyer = await User.findOne({ _id: user });
+    // console.log(findLawyer)
+    const cases = await Case.find({ user: user }).populate("user");
     console.log(cases);
     return res.status(200).json(cases);
 }

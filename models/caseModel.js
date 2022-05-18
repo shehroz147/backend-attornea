@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const caseSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    userEmail: { type: String },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     title: { type: String },
     category: { type: String },

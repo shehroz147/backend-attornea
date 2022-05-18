@@ -20,7 +20,7 @@ exports.addCase = async (request, user) => {
     // const userEmail = request.userEmail;
     const myCase = new Case({
         _id: new mongoose.Types.ObjectId(),
-        user: user,
+        user: user._id,
         title: request.title,
         category: request.category,
         stage: request.stage,

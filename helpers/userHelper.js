@@ -7,7 +7,7 @@ const Product = require("../models/product");
 
 
 exports.findUser = async (email, password) => {
-    return await User.find({
+    return await User.findOne({
         email: email,
         isVerified: true,
         password: password

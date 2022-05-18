@@ -141,12 +141,10 @@ exports.login = async (req, res) => {
     let request = req.body;
     let email = request.email;
     let password = request.password;
-    let checkEmail = await UserHelper.findUser(email, password);
-    console.log(checkEmail);
-    if (checkEmail.length === 0) {
+    const checkEmail = await User.findOne({ email: req.body.email, password: password });
+    if (checkEmail === 'null') {
         return res.status(400).json("Failed");
     }
-    console.log(checkEmail);
     return res.status(200).json(checkEmail);
 };
 //checked
@@ -157,8 +155,8 @@ exports.askQuestion = async (req, res) => {
     let title = req.body.title
     let areaOfLaw = req.body.areaOfLaw
     let description = req.body.description
-    let email = req.body.email;
-    const findUser = await User.findOne({ email: email });
+    let id = req.body.id;
+    const findUser = await User.findOne({ _id: id });
     const ques = new Question({
         _id: new mongoose.Types.ObjectId(),
         city: city,
@@ -246,34 +244,38 @@ exports.viewLawyers = async (req, res) => {
     return res.status(200).json(lawyerList);
 }
 
+exports.viewAllLawyers = async (req, res) => {
+    let request = req.body;
+    let lawyerList = [];
+    lawyerList = await User.find({ role: "Lawyer" });
+    return res.status(200).json(lawyerList);
+}
+
 exports.getUserData = async (req, res) => {
     let request = req.body;
-    console.log(req.body.email);
-    let email = request.email;
-    // console.log(request);
-    let findUser = await User.find({ email: email, role: "User" });
-    // console.log(findUser[0])
-    if (findUser === null) {
+    let id = request.id;
+    let findUser = await User.findOne({ _id: id });
+    if (findUser === 'null') {
         return res.status(400).json("User with thhis email doesnot exist")
     }
     else {
-        return res.status(200).json(findUser[0]);
+        return res.status(200).json(findUser);
     }
 }
 
 
 exports.getLawyerData = async (req, res) => {
     let request = req.body;
-    console.log(req.body.email);
-    let email = request.email;
+    // console.log(req.body.email);
+    let id = request.id;
     // console.log(request);
-    let findUser = await User.find({ email: email, role: "Lawyer" });
-    console.log(findUser[0])
+    let findUser = await User.findOne({ _id: id });
+    // console.log(findUser[0])
     if (findUser === null) {
         return res.status(400).json("User with thhis email doesnot exist")
     }
     else {
-        return res.status(200).json(findUser[0]);
+        return res.status(200).json(findUser);
     }
 }
 
@@ -296,15 +298,15 @@ exports.showAllQuestion = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     let request = req.body;
-    let email = req.body.email;
-    const findUser = await User.find({ email: email });
+    let id = req.body.id;
+    const findUser = await User.findOne({ _id: id });
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
         bio: req.body.bio || findUser.description,
         profileImage: req.body.imageUrl || findUser.profileImage
     };
-    await User.updateOne({ email: request.email }, { $set: updateInfo })
+    await User.updateOne({ _id: id }, { $set: updateInfo })
         .exec()
         .then(docs => {
             result = docs;
@@ -320,14 +322,12 @@ exports.updateUser = async (req, res) => {
 
 exports.updateLawyer = async (req, res) => {
     let request = req.body;
-    let email = req.body.email;
-    // console.log(request.experienceArray);
-    console.log("Practice Area", req.body.practiceArea);
-    const findUser = await User.find({ email: email, role: "Lawyer" });
+    const findUser = await User.findOne({ _id: req.body.id });
     const updateInfo = {
         firstName: req.body.firstName || findUser.firstName,
         gender: req.body.gender || findUser.gender,
         bio: req.body.bio || findUser.description,
+        email: req.body.email || findUser.email,
         profileImage: req.body.imageUrl || findUser.profileImage,
         licenseNo: req.body.License || findUser.licenseNo,
         education: req.body.education || findUser.education,
@@ -335,7 +335,7 @@ exports.updateLawyer = async (req, res) => {
         practiceArea: req.body.practiceArea || findLawyer.practiceArea,
         consultationFee: req.body.fee || findLawyer.consultationFee
     }
-    await User.updateOne({ email: request.email }, { $set: updateInfo })
+    await User.updateOne({ findUser }, { $set: updateInfo })
         .exec()
         .then(docs => {
             result = docs;
@@ -350,24 +350,19 @@ exports.updateLawyer = async (req, res) => {
 
 exports.showMyQuestions = async (req, res) => {
 
-    const question = await Question.find({ userEmail: req.body.email, isDeleted: false }).sort({ createdAt: -1 }).populate("user");
+    const question = await Question.find({ user: req.body.id, isDeleted: false }).sort({ createdAt: -1 }).populate("user").populate('comments.user');
+    console.log(question);
     return res.status(200).json(question);
 
 }
 
 exports.showResponded = async (req, res) => {
 
-    let email = req.body.email;
-    const findUser = await UserHelper.findUserIdByEmail(email);
+    let id = req.body.id;
+    const findUser = await User.findOne({ _id: id });
 
-    console.log(email);
-    const question = await Question.find({
-        comments: {
-            $elemMatch: {
-                user: findUser._id
-            }
-        }
-    });
+    // console.log(email);
+    const question = await Question.find({}, { comments: { $elemMatch: { user: findUser._id } } });
     console.log(question)
     return res.status(200).json(question);
 
@@ -419,8 +414,8 @@ exports.addComment = async (req, res) => {
     let request = req.body;
     // console.log(request);
     let questionId = request.questionId;
-    const userEmail = req.body.userName;
-    const user_ = await User.findOne({ email: userEmail, role: "Lawyer" });
+    const userEmail = req.body.userId;
+    const user_ = await User.findOne({ _id: userEmail });
     console.log("The user profile is :", user_);
     let findQuestion = await Question.findOne({ _id: questionId });
     const comments = {
