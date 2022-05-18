@@ -362,7 +362,11 @@ exports.showResponded = async (req, res) => {
     const findUser = await User.findOne({ _id: id });
 
     // console.log(email);
-    const question = await Question.find({}, { comments: { $elemMatch: { user: findUser._id } } });
+    const question = await Question.find({
+        $getField: {
+            comments: { $elemMatch: { user: id } }
+        }
+    });
     console.log(question)
     return res.status(200).json(question);
 
@@ -380,7 +384,7 @@ exports.showAllUsers = async (req, res) => {
 exports.showPosts = async (req, res) => {
 
     // let users = await User.find().sort({ createdAt: -1 });
-    let posts = await Post.find().sort({ createdAt: -1 });
+    let posts = await Post.find().sort({ createdAt: -1 }).populate("user");
     // Array.prototype.push.apply(users, lawyers);
     // console.lo
     console.log(posts);
@@ -392,15 +396,15 @@ exports.showPosts = async (req, res) => {
 exports.addPost = async (req, res) => {
 
     let data = req.body.data;
-    const userName = req.body.userName;
+    const id = req.body.id;
     const image = req.body.image;
-    const user = await User.find({ email: userName, isVerified: true });
-    console.log(user[0].firstName);
+    const user = await User.findOne({ _id: id });
+    // console.log(user[0].firstName);
     const post = new Post({
         _id: new mongoose.Types.ObjectId(),
         data: data,
         image: image,
-        userName: user[0].firstName
+        user: id
     });
     await post.save();
     return res.status(200).json("success");
@@ -432,10 +436,10 @@ exports.commentOnPost = async (req, res) => {
     let postId = req.body.postId;
     let userId = req.body.userId;
     let comment = req.body.desc;
-    let user = await User.findOne({ email: userId });
+    let user = await User.findOne({ _id: userId });
     let post = await Post.findOne({ _id: postId });
     const comments = {
-        user: user.email,
+        user: user._id,
         comment: comment
     }
     // console.log(post);
