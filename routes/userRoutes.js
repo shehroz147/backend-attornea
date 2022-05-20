@@ -32,4 +32,5 @@ router.post("/commentOnPost", UserController.commentOnPost);
 router.post("/showComments", UserController.showPostComment);
 router.post("/addComment", UserController.addComment);
 router.post("/showRespondedQuestion", UserController.showResponded);
+router.post("/showAllUnAnsweredQuestions", UserController.unAnsweredQuestions);
 module.exports = router;

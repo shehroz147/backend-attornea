@@ -27,7 +27,7 @@ exports.registerUser = async (req, res) => {
         return res.status(400).json("Missing required information")
     }
 
-    let checkEmail = await UserHelper.findUser(email.toLowerCase());
+    let checkEmail = await User.findOne({ email: email.toLowerCase() });
     // console.log(checkEmail);
     if (!(checkEmail === null)) {
         return res.status(400).json("Email already exists");
@@ -294,7 +294,13 @@ exports.showAllQuestion = async (req, res) => {
     return res.status(200).json(question);
 
 }
-
+exports.unAnsweredQuestions = async (req, res) => {
+    let id = req.body.id;
+    console.log(id);
+    const questions = await Question.find({ 'comments.user': { $ne: `${id}` } }).populate("user");
+    console.log(questions);
+    return res.status(200).json(questions);
+}
 
 exports.updateUser = async (req, res) => {
     let request = req.body;
@@ -419,8 +425,8 @@ exports.addComment = async (req, res) => {
     let request = req.body;
     // console.log(request);
     let questionId = request.questionId;
-    const userEmail = req.body.userId;
-    const user_ = await User.findOne({ _id: userEmail });
+    const id = req.body.id;
+    const user_ = await User.findOne({ _id: id });
     console.log("The user profile is :", user_);
     let findQuestion = await Question.findOne({ _id: questionId });
     const comments = {
@@ -428,7 +434,7 @@ exports.addComment = async (req, res) => {
         comment: request.Description
     };
     console.log(comments)
-    let addComment = await Question.updateOne({ findQuestion }, { $push: { comments: comments } });
+    let addComment = await Question.updateOne({ _id: questionId }, { $push: { comments: comments } });
     return res.status(200).json("successfull");
 }
 
@@ -449,4 +455,10 @@ exports.commentOnPost = async (req, res) => {
     // exports.addFriend = async (user, friend, res) => {
     //     return User.updateOne(user, { $push: { friends: { friend } } });
     // }
+}
+
+exports.deleteUser = async (req, res) => {
+    let email = req.body.email;
+    const deleteData = await User.deleteOne({ email: email }).exec();
+    return res.status(200).json("deleted")
 }

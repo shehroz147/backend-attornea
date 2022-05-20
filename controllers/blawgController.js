@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 exports.addBlawgs = async (req, res) => {
     let request = req.body;
+    console.log(request.description.currentContent);
     let title = request.title;
     let category = request.category;
     let description = request.description;
