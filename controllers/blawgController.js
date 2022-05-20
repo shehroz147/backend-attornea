@@ -24,12 +24,12 @@ exports.viewAllBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];
     blawgsList = await Blawgs.find();
-    return res.status(200).json(blawgsList);
+    return res.status(200).json(blawgsList).sort({ createdAt: -1 });
 }
 
 exports.viewBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];
-    blawgsList = await Blawgs.find().limit(4);
+    blawgsList = await Blawgs.find().limit(4).sort({ createdAt: -1 });
     return res.status(200).json(blawgsList);
 }
