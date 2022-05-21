@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 
 exports.addBlawgs = async (req, res) => {
     let request = req.body;
-    console.log(request.description.currentContent);
+    console.log(request);
+    // console.log(request.description._immutable.currentContent);
+    // console.log(request.description._immutable.decorator);
     let title = request.title;
     let category = request.category;
     let description = request.description;
@@ -23,8 +25,8 @@ exports.addBlawgs = async (req, res) => {
 exports.viewAllBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];
-    blawgsList = await Blawgs.find();
-    return res.status(200).json(blawgsList).sort({ createdAt: -1 });
+    blawgsList = await Blawgs.find().sort({ createdAt: -1 });;
+    return res.status(200).json(blawgsList)
 }
 
 exports.viewBlawgs = async (req, res) => {
