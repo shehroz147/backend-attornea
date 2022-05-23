@@ -56,7 +56,7 @@ exports.registerUser = async (req, res) => {
 exports.showPostComment = async (req, res) => {
     let postId = req.body.postId;
     // console.log(req.body);
-    let comments = await Post.find({ _id: postId }, { comments: 1 });
+    let comments = await Post.find({ _id: postId }, { comments: 1 }).populate('comments.user');;
     console.log(comments);
     return res.status(200).json(comments);
 }
@@ -294,6 +294,24 @@ exports.showAllQuestion = async (req, res) => {
     return res.status(200).json(question);
 
 }
+
+
+exports.getLawyerInfo = async (req, res) => {
+    let request = req.body;
+    // console.log(req.body.email);
+    let id = request.id;
+    // console.log(request);
+    let findUser = await User.findOne({ _id: id });
+    console.log(findUser)
+    if (findUser.length === 0) {
+        return res.status(400).json("User with thhis email doesnot exist")
+    }
+    else {
+        return res.status(200).json(findUser);
+    }
+}
+
+
 exports.unAnsweredQuestions = async (req, res) => {
     let id = req.body.id;
     console.log(id);

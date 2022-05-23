@@ -25,7 +25,7 @@ exports.addBlawgs = async (req, res) => {
 exports.viewAllBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];
-    blawgsList = await Blawgs.find().sort({ createdAt: -1 });;
+    blawgsList = await Blawgs.find({ category: req.body.category }).sort({ createdAt: -1 });;
     return res.status(200).json(blawgsList)
 }
 
