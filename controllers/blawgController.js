@@ -29,6 +29,13 @@ exports.viewAllBlawgs = async (req, res) => {
     return res.status(200).json(blawgsList)
 }
 
+exports.blawgs = async (req, res) => {
+    // let request = req.body;
+    let blawgsList = [];
+    blawgsList = await Blawgs.find().sort({ createdAt: -1 });;
+    return res.status(200).json(blawgsList)
+}
+
 exports.viewBlawgs = async (req, res) => {
     // let request = req.body;
     let blawgsList = [];

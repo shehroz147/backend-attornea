@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
     practiceArea: { type: String },
     lisenceNo: { type: Number },
     firstName: { type: String, required: true },
+    earnings: { type: Number },
     consultationFee: { type: String },
     lastName: { type: String, required: true },
     role: { type: String, enum: ["User", "Lawyer"], required: true, default: "User" },

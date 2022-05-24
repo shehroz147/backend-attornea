@@ -34,4 +34,9 @@ router.post("/addComment", UserController.addComment);
 router.post("/showRespondedQuestion", UserController.showResponded);
 router.post("/showAllUnAnsweredQuestions", UserController.unAnsweredQuestions);
 router.post("/getUserData", UserController.getLawyerInfo);
+router.post('/createBooking', UserController.createBooking);
+router.post('/showAllBookings', UserController.showAllBookings);
+
+
+
 module.exports = router;

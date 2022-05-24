@@ -11,4 +11,7 @@ const UserController = require('../controllers/userController');
 router.post("/showAllUsers", UserController.showAllUsers);
 router.post("/login", UserController.login);
 router.post("/deleteUser", UserController.deleteUser);
+router.post("/showAllBookings", UserController.showBookings);
+router.post("/editBooking", UserController.editBooking);
+router.post("/showEarnings", UserController.showEarnings);
 module.exports = router;

@@ -12,6 +12,7 @@ const Post = require("../models/postModel");
 const { findLawyer } = require("../helpers/lawyerHelper");
 const Citation = require("../models/citationModel");
 const Diary = require("../models/diaryModel");
+const Booking = require("../models/bookingModel");
 
 exports.registerUser = async (req, res) => {
     let request = req.body;
@@ -406,6 +407,15 @@ exports.showAllUsers = async (req, res) => {
 
 }
 
+exports.showEarnings = async (req, res) => {
+
+    let users = await User.find({ role: "Lawyer" }).sort({ createdAt: -1 });
+    // let lawyers = await Lawyer.find().sort({ createdAt: -1 });
+    // Array.prototype.push.apply(users, lawyers);
+    return res.status(200).json(users);
+
+}
+
 exports.showPosts = async (req, res) => {
 
     // let users = await User.find().sort({ createdAt: -1 });
@@ -475,8 +485,60 @@ exports.commentOnPost = async (req, res) => {
     // }
 }
 
+exports.editBooking = async (req, res) => {
+    let id = req.body.id;
+    const findBooking = await Booking.findOne({ _id: id });
+    const findUser = await User.findOne({ _id: findBooking.lawyerId });
+    console.log(findUser);
+    await Booking.updateOne({ _id: id }, { $set: { status: req.body.status } }).exec();
+    const newEarnings = findUser.earnings + findBooking.charges;
+    await User.updateOne({ _id: findBooking.lawyerId }, { $set: { earnings: newEarnings } }).exec();
+    return res.status(200).json("Done");
+}
+
 exports.deleteUser = async (req, res) => {
     let email = req.body.email;
     const deleteData = await User.deleteOne({ email: email }).exec();
     return res.status(200).json("deleted")
+}
+
+
+
+exports.createBooking = async (req, res) => {
+    let request = req.body;
+    console.log(request)
+    let userId = request.userId;
+    let lawyerId = request.lawyerId;
+    let time = request.time;
+    let date = request.date;
+    let userName = request.userName;
+    let phoneNumber = request.phoneNumber;
+    let charges = request.fee;
+    const booking = new Booking({
+        _id: new mongoose.Types.ObjectId(),
+        userId: userId,
+        lawyerId: lawyerId,
+        time: time,
+        date: date,
+        userName: userName,
+        phoneNumber: phoneNumber,
+        charges: charges
+    });
+    await booking.save();
+    return res.status(200).json("Successful");
+};
+
+exports.showBookings = async (req, res) => {
+
+    // let users = await User.find().sort({ createdAt: -1 });
+    let bookings = await Booking.find().sort({ createdAt: -1 }).populate("userId").populate("lawyerId");
+    // Array.prototype.push.apply(users, lawyers);
+    // console.lo
+    return res.status(200).json(bookings);
+}
+
+exports.showAllBookings = async (req, res) => {
+
+    let bookings = await Booking.find({ lawyerId: req.body.id, status: "Approved" }).sort({ createdAt: -1 }).populate("userId").populate("lawyerId");
+    return res.status(200).json(bookings);
 }
