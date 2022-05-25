@@ -6,8 +6,8 @@ const caseSchema = mongoose.Schema({
     title: { type: String },
     category: { type: String },
     stage: { type: String, default: 'Open' },
-    nextHiring: { type: Date },
-    previousHiring: { type: Date },
+    nextHiring: { type: String },
+    previousHiring: { type: String },
     notes: { type: String },
     courtName: { type: String },
 }, { timestamps: true });
