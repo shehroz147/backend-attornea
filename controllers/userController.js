@@ -13,6 +13,8 @@ const { findLawyer } = require("../helpers/lawyerHelper");
 const Citation = require("../models/citationModel");
 const Diary = require("../models/diaryModel");
 const Booking = require("../models/bookingModel");
+const Case = require("../models/caseModel");
+
 
 exports.registerUser = async (req, res) => {
     let request = req.body;
@@ -66,6 +68,18 @@ exports.getCitation = async (req, res) => {
     const getCitation = await Citation.find();
     return res.status("200").json(getCitation);
 }
+
+exports.getCasesForDate = async (req, res) => {
+    const user = req.body.id;
+    const date = req.body.date;
+    const findLawyer = await User.findOne({ _id: user });
+    // console.log(findLawyer)
+    const cases = await Case.find({ user: user, nextHiring: date }).populate("user");
+    console.log(cases);
+    return res.status(200).json(cases);
+}
+
+
 
 exports.deleteQuestion = async (req, res) => {
     const id = req.body.id;
