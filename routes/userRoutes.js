@@ -37,6 +37,6 @@ router.post("/getUserData", UserController.getLawyerInfo);
 router.post('/createBooking', UserController.createBooking);
 router.post('/showAllBookings', UserController.showAllBookings);
 router.post('/getDateCases', UserController.getCasesForDate)
-
+router.post('/getLawyerByCategory', UserController.getLawyerByCategory);
 
 module.exports = router;

@@ -267,6 +267,13 @@ exports.viewAllLawyers = async (req, res) => {
     return res.status(200).json(lawyerList);
 }
 
+exports.getLawyerByCategory = async (req, res) => {
+    let request = req.body;
+    let lawyerList = [];
+    lawyerList = await User.find({ role: "Lawyer", areaOfSpecialization: req.body.category });
+    return res.status(200).json(lawyerList);
+}
+
 exports.getUserData = async (req, res) => {
     let request = req.body;
     let id = request.id;
@@ -377,16 +384,8 @@ exports.updateLawyer = async (req, res) => {
         consultationFee: req.body.fee || findUser.consultationFee,
         areaOfSpecialization: req.body.areaOfSpecialization || findUser.areaOfSpecialization
     }
-    await User.updateOne({ _id: req.body.id }, { $set: updateInfo })
-        .exec()
-        .then(docs => {
-            result = docs;
-        })
-        .catch(err => {
-            res.status(500).json({
-                error: err
-            });
-        });
+    await User.updateOne({ _id: req.body.id }, { $set: updateInfo });
+
     return res.status(200).json("successfull");
 }
 
