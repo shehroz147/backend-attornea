@@ -70,11 +70,12 @@ exports.getCitation = async (req, res) => {
 }
 
 exports.getCasesForDate = async (req, res) => {
-    const user = req.body.id;
+    const user = req.body._id;
+    console.log(req.body);
     const date = req.body.date;
     const findLawyer = await User.findOne({ _id: user });
     // console.log(findLawyer)
-    const cases = await Case.find({ user: user, nextHiring: date }).populate("user");
+    const cases = await Case.find({ user: req.body._id, nextHiring: date }).populate("user");
     console.log(cases);
     return res.status(200).json(cases);
 }
