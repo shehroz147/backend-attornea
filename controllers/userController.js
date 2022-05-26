@@ -374,7 +374,8 @@ exports.updateLawyer = async (req, res) => {
         education: req.body.education || findUser.education,
         workExperience: req.body.workExperience || findUser.workExperience,
         practiceArea: req.body.practiceArea || findUser.practiceArea,
-        consultationFee: req.body.fee || findUser.consultationFee
+        consultationFee: req.body.fee || findUser.consultationFee,
+        areaOfSpecialization: req.body.areaOfSpecialization || findUser.areaOfSpecialization
     }
     await User.updateOne({ _id: req.body.id }, { $set: updateInfo })
         .exec()

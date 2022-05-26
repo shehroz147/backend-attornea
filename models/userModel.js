@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema({
     country: { type: String },
     bio: { type: String },
     practiceArea: { type: String },
+    areaOfSpecialization: { type: String },
     lisenceNo: { type: Number },
     firstName: { type: String, required: true },
     earnings: { type: Number },
