@@ -8,6 +8,7 @@ const caseSchema = mongoose.Schema({
     stage: { type: String, default: 'Open' },
     nextHiring: { type: String },
     previousHiring: { type: String },
+    startingDate: { type: String },
     history: { type: Array },
     notes: { type: String },
     courtName: { type: String },

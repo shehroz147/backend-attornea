@@ -80,6 +80,18 @@ exports.getCasesForDate = async (req, res) => {
     return res.status(200).json(cases);
 }
 
+exports.getOpenClosedCases = async (req, res) => {
+    const user = req.body._id;
+    console.log(req.body);
+    // const date = req.body.date;
+    const findLawyer = await User.findOne({ _id: user });
+    // console.log(findLawyer)
+    const cases = await Case.find({
+        user: req.body._id, stage: { $ne: "Fixed" }
+    }).populate("user");
+    console.log(cases);
+    return res.status(200).json(cases);
+}
 
 
 exports.deleteQuestion = async (req, res) => {

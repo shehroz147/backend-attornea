@@ -26,6 +26,7 @@ exports.addCase = async (request, user) => {
         stage: request.stage,
         nextHiring: request.nextHiring,
         // previousHiring: request.previousHiring,
+        startingDate: request.startingDate,
         notes: request.notes,
         courtName: request.courtName,
     })
