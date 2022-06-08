@@ -64,6 +64,20 @@ exports.showPostComment = async (req, res) => {
     return res.status(200).json(comments);
 }
 
+
+exports.getCases = async (req, res) => {
+    const lawyerId = req.body.lawyerId;
+    // console.log(user);
+    const userId = req.body.userId;
+    const findLawyer = await User.findOne({ _id: userId, shareDiary: lawyerId });
+    // console.log(findLawyer)
+    const cases = await Case.find({ user: lawyerId }).populate("user");
+    console.log(cases);
+    return res.status(200).json(cases);
+}
+
+
+
 exports.getCitation = async (req, res) => {
     const getCitation = await Citation.find();
     return res.status("200").json(getCitation);
@@ -198,6 +212,23 @@ exports.askQuestion = async (req, res) => {
     // await Question.find({ _id: ques._id }).populate("userId");
     return res.status(200).json("Question Posted")
 }
+
+
+
+exports.shareDiary = async (req, res) => {
+
+    let lawyerId = req.body.lawyerId;
+    let userId = req.body.userId;
+    const updateInfo = {
+        sharedDiary: req.body.lawyerId
+    }
+    const findUser = await User.updateOne({ _id: userId }, { $set: updateInfo }).exec();
+
+    // await Question.find({ _id: ques._id }).populate("userId");
+    return res.status(200).json("Diary Shared")
+}
+
+
 
 exports.hire = async (req, res) => {
     let userId = req.body.userId

@@ -40,5 +40,7 @@ router.post('/getDateCases', UserController.getCasesForDate)
 router.post('/getLawyerByCategory', UserController.getLawyerByCategory);
 router.post('/getOpenClosedCases', UserController.getOpenClosedCases);
 router.post("/updateComment", UserController.updateComment);
+router.post("/shareDiary", UserController.shareDiary);
+router.post('/getCasesForStudent', UserController.getCases)
 
 module.exports = router;
