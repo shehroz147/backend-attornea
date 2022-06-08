@@ -223,7 +223,6 @@ exports.shareDiary = async (req, res) => {
         sharedDiary: req.body.lawyerId
     }
     const findUser = await User.updateOne({ _id: userId }, { $set: updateInfo }).exec();
-
     // await Question.find({ _id: ques._id }).populate("userId");
     return res.status(200).json("Diary Shared")
 }
@@ -318,6 +317,19 @@ exports.getLawyerByCategory = async (req, res) => {
 }
 
 exports.getUserData = async (req, res) => {
+    let request = req.body;
+    let id = request.id;
+    let findUser = await User.findOne({ _id: id });
+    if (findUser === 'null') {
+        return res.status(400).json("User with thhis email doesnot exist")
+    }
+    else {
+        return res.status(200).json(findUser);
+    }
+}
+
+
+exports.getStudentData = async (req, res) => {
     let request = req.body;
     let id = request.id;
     let findUser = await User.findOne({ _id: id });

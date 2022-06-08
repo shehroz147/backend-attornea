@@ -16,6 +16,8 @@ router.post('/talk', UserController.talk)
 router.post('/viewLawyers', UserController.viewLawyers);
 router.post('/viewAllLawyers', UserController.viewAllLawyers);
 router.post('/userData', UserController.getUserData);
+router.post('/studentData', UserController.getStudentData);
+
 router.post('/lawyerData', UserController.getLawyerData);
 router.post('/viewqueries', UserController.viewqueries);
 router.post("/showMyQuestions", UserController.showMyQuestions);
