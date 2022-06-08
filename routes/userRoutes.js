@@ -39,5 +39,6 @@ router.post('/showAllBookings', UserController.showAllBookings);
 router.post('/getDateCases', UserController.getCasesForDate)
 router.post('/getLawyerByCategory', UserController.getLawyerByCategory);
 router.post('/getOpenClosedCases', UserController.getOpenClosedCases);
+router.post("/updateComment", UserController.updateComment);
 
 module.exports = router;

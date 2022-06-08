@@ -493,6 +493,23 @@ exports.addComment = async (req, res) => {
     return res.status(200).json("successfull");
 }
 
+exports.updateComment = async (req, res) => {
+    let request = req.body;
+    // console.log(request);
+    let questionId = request.questionId;
+    const id = req.body.userId;
+    const user_ = await User.findOne({ _id: id });
+    console.log("The user profile is :", user_);
+    let findQuestion = await Question.findOne({ _id: questionId });
+    const comments = {
+        comment: request.comment
+    };
+    console.log(comments)
+    let addComment = await Question.updateOne({ _id: questionId, comment: { $elemMatch: { user: id } } }, { comments: { $set: { comment: comments } } });
+    return res.status(200).json("successfull");
+}
+
+
 exports.commentOnPost = async (req, res) => {
     // console.log(req.body);
     let postId = req.body.postId;

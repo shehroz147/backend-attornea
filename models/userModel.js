@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
     earnings: { type: Number },
     consultationFee: { type: String },
     lastName: { type: String, required: true },
-    role: { type: String, enum: ["User", "Lawyer"], required: true, default: "User" },
+    role: { type: String, enum: ["User", "Lawyer", "Student"], required: true, default: "User" },
     status: { type: String, enum: ["Inactive", "Active"], default: "Inactive" },
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: "false" },
