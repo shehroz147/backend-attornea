@@ -17,6 +17,7 @@ router.post("/addBlawg", BlawgController.addBlawgs);
 // router.post('/addProduct', LawyerController.addProduct)
 // router.post('/getuserbyID', LawyerController.getUserbyId)
 router.post('/viewBlawgs', BlawgController.viewBlawgs);
+router.post('/viewABlawg', BlawgController.viewABlawg);
 router.post('/viewAllBlawgs', BlawgController.viewAllBlawgs);
 router.post("/viewAll", BlawgController.blawgs)
 // router.post('/editProducts', LawyerController.editProduct)
