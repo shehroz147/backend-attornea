@@ -66,12 +66,12 @@ exports.showPostComment = async (req, res) => {
 
 
 exports.getCases = async (req, res) => {
-    const lawyerId = req.body.lawyerId;
+    // const lawyerId = req.body.lawyerId;
     // console.log(user);
     const userId = req.body.userId;
-    const findLawyer = await User.findOne({ _id: userId, shareDiary: lawyerId });
+    const findLawyer = await User.findOne({ _id: userId });
     // console.log(findLawyer)
-    const cases = await Case.find({ user: lawyerId }).populate("user");
+    const cases = await Case.find({ user: findLawyer.sharedDiary }).populate("user");
     console.log(cases);
     return res.status(200).json(cases);
 }
