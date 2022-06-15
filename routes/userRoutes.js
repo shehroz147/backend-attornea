@@ -15,6 +15,7 @@ router.post("/hire", UserController.hire)
 router.post('/talk', UserController.talk)
 router.post('/viewLawyers', UserController.viewLawyers);
 router.post('/viewAllLawyers', UserController.viewAllLawyers);
+router.post('/showAllStudents', UserController.showAllStudents);
 router.post('/userData', UserController.getUserData);
 router.post('/studentData', UserController.getStudentData);
 

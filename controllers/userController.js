@@ -309,6 +309,16 @@ exports.viewAllLawyers = async (req, res) => {
     return res.status(200).json(lawyerList);
 }
 
+
+
+exports.showAllStudents = async (req, res) => {
+    let request = req.body;
+    let lawyerList = [];
+    lawyerList = await User.find({ role: "Student" });
+    return res.status(200).json(lawyerList);
+}
+
+
 exports.getLawyerByCategory = async (req, res) => {
     let request = req.body;
     let lawyerList = [];
