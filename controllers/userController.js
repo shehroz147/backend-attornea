@@ -384,6 +384,16 @@ exports.showAllQuestion = async (req, res) => {
 }
 
 
+exports.showQuestion = async (req, res) => {
+
+    const id = req.body.id;
+    const question = await Question.find({ _id: id }).populate("user");
+    console.log(question);
+    return res.status(200).json(question);
+
+}
+
+
 exports.getLawyerInfo = async (req, res) => {
     let request = req.body;
     // console.log(req.body.email);

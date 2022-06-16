@@ -45,6 +45,7 @@ router.post('/getOpenClosedCases', UserController.getOpenClosedCases);
 router.post("/updateComment", UserController.updateComment);
 router.post("/shareDiary", UserController.shareDiary);
 router.post('/getCasesForStudent', UserController.getCases);
+router.post('/showQuestionUsingId', UserController.showQuestion);
 
 
 module.exports = router;
