@@ -649,3 +649,9 @@ exports.showAllBookings = async (req, res) => {
     let bookings = await Booking.find({ lawyerId: req.body.id, status: "Approved" }).sort({ createdAt: -1 }).populate("userId").populate("lawyerId");
     return res.status(200).json(bookings);
 }
+
+exports.showUserBookings = async (req, res) => {
+
+    let bookings = await Booking.find({ userId: req.body.id, status: "Approved" }).sort({ createdAt: -1 }).populate("userId").populate("lawyerId");
+    return res.status(200).json(bookings);
+}
