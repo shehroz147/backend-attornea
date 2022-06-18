@@ -6,6 +6,7 @@ const bookingSchema = mongoose.Schema({
     lawyerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     status: { type: String, enum: ["pending", "completed"], default: "pending" },
     time: { type: String },
+    callId: { type: String },
     date: { type: String },
     userName: { type: String },
     charges: { type: Number },

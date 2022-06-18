@@ -4,13 +4,24 @@ const app = express();
 const https = require("https");
 const env = require("dotenv").config();
 const mongoose = require('mongoose');
+const cors = require("cors");
+const PORT = 4000;
+const server = require("http").createServer(app);
+
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const http = require('http');
 // const https = require('https');
 // const fs = require('fs');
 // const app = require('./app');
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 
 //Required Routes
 const adminRoutes = require("./routes/adminRoutes");
@@ -19,16 +30,14 @@ const lawyerRoutes = require('./routes/lawyerRoutes');
 const productRoutes = require('./routes/productRoutes');
 const blawgRoutes = require("./routes/blawgRoutes");
 const imageRoutes = require("./routes/Image");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const options = {
     key: fs.existsSync(process.env.SSL_KEY) ? fs.readFileSync(process.env.SSL_KEY) : null,
     cert: fs.existsSync(process.env.SSL_CRT) ? fs.readFileSync(process.env.SSL_CRT) : null,
 };
 
-const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
-// const server = https.createServer(app);
-
-
+// const server = process.env.MODE == "DEV" ? https.createServer(app) : http.createServer(options, app);
 // const server = process.env.MODE == "DEV" ? https.createServer(app) : https.createServer(options, app);
 
 // const url = 'mongodb+srv://nikita:Restart987@test.yxvwr.mongodb.net/test';
@@ -45,8 +54,34 @@ mongoose.connect(url, { useNewUrlParser: true }, (err) => {
 });
 mongoose.Promise = global.Promise;
 
-// Middlewears 
 
+
+app.use(cors());
+
+
+app.get('/', (req, res) => {
+    res.send('Running');
+});
+
+io.on("connection", (socket) => {
+    socket.emit("me", socket.id);
+
+    socket.on("disconnect", () => {
+        socket.broadcast.emit("callEnded")
+    });
+
+    socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+        io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+    });
+
+    socket.on("answerCall", (data) => {
+        io.to(data.to).emit("callAccepted", data.signal)
+    });
+});
+
+
+// Middlewears 
+// app.use('/peerjs', peer);
 app.use(morgan("dev"));
 app.use('/Uploads', express.static('Uploads'));
 app.use('/Assets', express.static('Assets'));
@@ -72,6 +107,11 @@ app.use("/lawyer", lawyerRoutes)
 app.use("/products", productRoutes);
 app.use("/blawgs", blawgRoutes);
 app.use("/image", imageRoutes);
+app.use("/appointments", appointmentRoutes);
+
+
+
+
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;
@@ -88,5 +128,7 @@ app.use((error, req, res, next) => {
 });
 
 
-app.listen(process.env.PORT || 4000);
+server.listen(process.env.PORT || 4000);
 module.exports = app;
+
+
