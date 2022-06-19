@@ -19,11 +19,11 @@ const twilioClient = require("twilio")(
 
 exports.videoCall = async (req, res) => {
 
-    if (!req.body.roomName) {
-        console.log('hi')
-        return res.status(400).json("Must include roomName argument.");
-    }
-    const roomName = req.body.roomName;
+    // if (!req.body.roomName) {
+    //     console.log('hi')
+    //     return res.status(400).json("Must include roomName argument.");
+    // }
+    const roomName = "attornea";
     console.log('hi')
     // find or create a room with the given roomName
     this.findOrCreateRoom(roomName);
