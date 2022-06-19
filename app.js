@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const https = require("https");
-const env = require("dotenv").config();
 const mongoose = require('mongoose');
 
 require("dotenv").config();
