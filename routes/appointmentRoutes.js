@@ -6,8 +6,8 @@ const router = express.Router();
 const AppoinmentController = require('../controllers/appointmentController');
 
 
-router.get('/', AppoinmentController.videoCall);
-// router.get('/:room', AppoinmentController.startCall);
+router.post('/join-room', AppoinmentController.videoCall);
+router.get('/', AppoinmentController.room);
 // Routes
 
 module.exports = router;
